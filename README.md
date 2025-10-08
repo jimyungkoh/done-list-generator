@@ -1,0 +1,158 @@
+# done-list-generator
+
+[![npm version](https://img.shields.io/npm/v/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
+[![npm downloads](https://img.shields.io/npm/dm/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
+![node >=18](https://img.shields.io/badge/node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
+Generate a daily Done List (Markdown) from your local Git commits using an LLM (via OpenRouter). Cross-platform (Windows/macOS/Linux), Node 18+.
+
+[한국어](docs/readme/ko.md) [日本語](docs/readme/ja.md) [中文](docs/readme/zh.md)
+
+## Features
+
+- Summarize commits and diffs into a concise daily Markdown report
+- Incremental updates: appends to the same day's file as you keep working
+- Zero external runtime deps (uses built-in `fetch`, plain `child_process` for Git)
+- Cross-platform safe (no shell quoting tricks; argument arrays only)
+
+## Requirements
+
+- Node.js 18+ (ESM)
+- Git installed and available on PATH
+- Network access to OpenRouter API
+
+## Installation
+
+You can run it without installing (recommended):
+
+```bash
+npx donelist --dry-run
+```
+
+Or install globally:
+
+```bash
+npm i -g done-list-generator
+donelist --dry-run
+```
+
+## Quick Start
+
+1. Move to a Git repository root (or any subdirectory inside it).
+2. Set your OpenRouter API key and run:
+
+```bash
+export OPENROUTER_API_KEY=YOUR_KEY   # Windows PowerShell: $env:OPENROUTER_API_KEY="YOUR_KEY"
+npx donelist --lang en               # or ko/ja/zh (default: ko)
+```
+
+This generates `./done-list/YYYY-MM-DD.md` in your current working directory.
+
+## How it chooses commit range
+
+- If `./done-list/YYYY-MM-DD.md` exists and contains `<!-- lastProcessedCommit: <hash> -->`, it processes commits in `<hash>..HEAD` and appends an "Additional updates (HH:mm)" section to the file, updating the header hash.
+- Otherwise, it processes commits from local midnight (`YYYY-MM-DD 00:00`) to now.
+- You can override with `--since <iso>` and/or `--until <iso>`.
+
+## CLI
+
+```bash
+donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
+         [--openrouter-key <key>] [--since <iso>] [--until <iso>]
+```
+
+- `--lang <code>`: Output language (default: `ko`).
+- `--model <name>`: OpenRouter model (optional).
+- `--openrouter-key <key>`: If omitted, uses `OPENROUTER_API_KEY` env var.
+- `--dry-run`: Print to STDOUT without writing files.
+- `--since <iso>` / `--until <iso>`: Manually set time window.
+- `--verbose`: Extra diagnostics.
+
+## Output
+
+Writes to `./done-list/YYYY-MM-DD.md` (relative to current working directory).
+The file starts with a header comment storing the last processed commit:
+
+```markdown
+<!-- lastProcessedCommit: <hash> -->
+
+# Done List - YYYY-MM-DD
+
+## Summary
+
+...
+
+## Details
+
+- ...
+```
+
+On subsequent runs (same day), it appends:
+
+```markdown
+## Additional updates (HH:mm)
+
+...
+```
+
+## Configuration & Environment
+
+- Primary configuration is via CLI flags and environment variables.
+- `OPENROUTER_API_KEY` must be set or provided via `--openrouter-key`.
+- No separate config file is required.
+
+## Cross‑platform notes
+
+- Uses `child_process.spawn('git', args, { shell: false })` with argument arrays for safety on Windows/macOS/Linux.
+- Requires `git` on PATH.
+
+## Privacy & Security
+
+The tool sends commit metadata and raw diffs (trimmed if large) to the LLM provider for summarization. Do not use it on repositories containing sensitive information unless your policy allows it. Before using this tool, please refer to your LLM provider's policies.
+
+## Troubleshooting
+
+- "Not a git repository": run inside a Git repo or `git init` first.
+- "No commits to process today": no commits in the selected window.
+- "OpenRouter key missing": set `OPENROUTER_API_KEY` or pass `--openrouter-key`.
+
+## Contributing
+
+Contributions are welcome! Please keep changes simple and readable. Simplicity-first and cross-platform safety are hard requirements.
+
+### Development setup
+
+```bash
+git clone <this-repo>
+cd done-list-generator
+npm i
+npm run build
+```
+
+Try it locally inside any Git repo:
+
+```bash
+cd /path/to/your/git/repo
+OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
+```
+
+### Guidelines
+
+- Keep PRs small and focused. Avoid adding new runtime dependencies.
+- Cross-platform: always use `child_process.spawn('git', args, { shell: false })` with argument arrays.
+- ESM only, Node 18+. Use built-in modules via `node:` specifiers.
+- Prefer clear names and small modules. Add types for public surfaces.
+- Do not over-engineer: prioritize readability and maintainability.
+
+### Submitting changes
+
+1. Fork the repo and create a feature branch.
+2. Implement changes with tests if applicable.
+3. Run `npm run build` and verify `npx donelist --dry-run` works in a real repo.
+4. Open a PR describing the motivation and approach.
+
+## License
+
+MIT

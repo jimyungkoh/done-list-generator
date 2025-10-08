@@ -1,0 +1,33 @@
+{
+  "name": "done-list-generator",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Generate daily done-list markdown from local git commits using LLM.",
+  "type": "module",
+  "bin": {
+    "donelist": "./dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "node -e \"fs=require('fs');try{fs.rmSync('dist',{recursive:true,force:true})}catch(e){}\"",
+    "start": "node ./dist/cli.js",
+    "dev": "node --enable-source-maps ./dist/cli.js --dry-run"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "done-list",
+    "git",
+    "openrouter",
+    "cli",
+    "markdown"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "typescript": "^5.6.3"
+  }
+}
