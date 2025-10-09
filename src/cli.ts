@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { join } from "node:path";
+import { resolveConfig } from "./config.js";
 import {
   assertInsideGitRepo,
   collectCommitsWithDiff,
@@ -54,8 +55,9 @@ function buildPrompt(
 
 async function main() {
   const opts = parseArgs(process.argv);
-  const lang = opts.lang ?? "ko";
-  const apiKey = opts.openrouterKey ?? process.env.OPENROUTER_API_KEY ?? "";
+  const resolved = await resolveConfig(opts);
+  const lang = resolved.lang;
+  const apiKey = resolved.openrouterKey;
   const dateStr = await getTodayDateString();
   const outputPath = join(process.cwd(), "done-list", `${dateStr}.md`);
 
@@ -95,13 +97,13 @@ async function main() {
   const content = await callOpenRouter(
     apiKey,
     {
-      model: opts.model,
+      model: resolved.model ?? opts.model,
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },
       ],
     },
-    opts.verbose
+    resolved.verbose ?? opts.verbose
   );
 
   if (opts.dryRun) {
