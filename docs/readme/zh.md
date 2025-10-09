@@ -43,7 +43,7 @@ donelist --dry-run
 
 ```bash
 export OPENROUTER_API_KEY=YOUR_KEY   # Windows PowerShell: $env:OPENROUTER_API_KEY="YOUR_KEY"
-npx donelist --lang zh               # 也可使用 en/ko/ja（默认：ko）
+npx donelist --lang zh               # 也可使用 en/ko/ja（默认：en）
 ```
 
 将在当前工作目录生成 `./done-list/YYYY-MM-DD.md` 文件。
@@ -61,7 +61,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--openrouter-key <key>] [--since <iso>] [--until <iso>]
 ```
 
-- `--lang <code>`：输出语言(默认：`ko`)。覆盖配置。
+- `--lang <code>`：输出语言(默认：`en`)。覆盖配置。
 - `--model <name>`：指定 OpenRouter 模型(可选)。覆盖配置。
 - `--openrouter-key <key>`：省略时，使用配置或 `OPENROUTER_API_KEY` 环境变量。
 - `--dry-run`：仅输出到控制台，不保存文件。
@@ -103,15 +103,16 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - **全局配置**（用户范围）：
   - Unix：`$XDG_CONFIG_HOME/donelist/donelist.json` 或 `~/.config/donelist/donelist.json`
   - Windows：`%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- **环境变量**：仅当优先级更高的来源未提供时读取 `OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`。
+- **环境变量**：仅当优先级更高的来源未提供时读取 `OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`、`DONELIST_TRIM_DIFFS`。
 
 在执行 `npm install` 时，如果上述全局路径中没有配置文件，会自动创建一个默认文件。
 
 默认值：
 
-- `lang`: `"ko"`
+- `lang`: `"en"`
 - `model`: 默认无（需通过 CLI/配置指定）
 - `verbose`: `false`
+- `trimDiffs`: `true`（当 diff 超过 6 万字符时会截断）
 
 配置按优先级合并，高优先级覆盖低优先级。
 
@@ -122,14 +123,15 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
   "lang": "ko",
   "model": "openai/gpt-4.1-mini",
   "openrouterKey": "sk-...",
-  "verbose": true
+  "verbose": true,
+  "trimDiffs": false
 }
 ```
 
 - JSON 解析错误或文件缺失静默忽略(使用默认值)。
 - API 密钥：CLI &gt; 配置文件 &gt; 环境变量(`OPENROUTER_API_KEY`) &gt; 空字符串(空则失败) 顺序解析。
-- 字段：`lang` ("en"/"ko"/"ja"/"zh")、 `model` (OpenRouter 模型名)、 `openrouterKey` (API 密钥)、 `verbose` (布尔值)。
-- 环境变量解析：`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`。`DONELIST_VERBOSE` 支持 `true/1/yes/on` → true，`false/0/no/off` → false。
+- 字段：`lang` ("en"/"ko"/"ja"/"zh")、`model` (OpenRouter 模型名)、`openrouterKey` (API 密钥)、`verbose` (布尔值)、`trimDiffs` (布尔值)。
+- 环境变量解析：`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`、`DONELIST_TRIM_DIFFS`。`true/1/yes/on` → true，`false/0/no/off` → false。
 
 ## 跨平台注意事项
 

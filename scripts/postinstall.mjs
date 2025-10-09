@@ -39,10 +39,11 @@ async function ensureDefaultConfig() {
   }
 
   const defaultConfig = {
-    lang: "ko",
+    lang: "en",
     model: "",
     openrouterKey: "",
     verbose: false,
+    trimDiffs: true,
   };
 
   const dir = dirname(configPath);

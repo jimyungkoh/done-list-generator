@@ -43,7 +43,7 @@ donelist --dry-run
 
 ```bash
 export OPENROUTER_API_KEY=YOUR_KEY   # Windows PowerShell: $env:OPENROUTER_API_KEY="YOUR_KEY"
-npx donelist --lang ko               # en/ja/zh도 가능(기본: ko)
+npx donelist --lang ko               # en/ja/zh도 가능(기본: en)
 ```
 
 현재 작업 디렉토리에 `./done-list/YYYY-MM-DD.md` 파일이 생성됩니다.
@@ -58,15 +58,17 @@ npx donelist --lang ko               # en/ja/zh도 가능(기본: ko)
 
 ```bash
 donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
-         [--openrouter-key <key>] [--since <iso>] [--until <iso>]
+         [--openrouter-key <key>] [--since <iso>] [--until <iso>] \
+         [--author <name>] [--author-email <email>]
 ```
 
-- `--lang <code>`: 출력 언어(기본: `ko`). 설정 파일 덮어씀.
+- `--lang <code>`: 출력 언어(기본: `en`). 설정 파일 덮어씀.
 - `--model <name>`: OpenRouter 모델 지정(선택 사항). 설정 파일 덮어씀.
 - `--openrouter-key <key>`: 지정하지 않으면 설정 파일 또는 `OPENROUTER_API_KEY` 환경 변수를 사용.
 - `--dry-run`: 파일을 저장하지 않고 콘솔에 출력합니다.
 - `--since <iso>` / `--until <iso>`: 시간 범위를 수동으로 설정합니다.
 - `--verbose`: 상세 로그 출력. 설정 파일 덮어씀.
+- `--author <name>` / `--author-email <email>`: 작성자 기준 필터. 지정하지 않으면 로컬 `git config user.name`/`user.email`을 기본으로 읽어 해당 사용자 커밋만 포함합니다.
 
 ## 출력 형식
 
@@ -103,15 +105,16 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - **전역 설정**(사용자 범위):
   - Unix: `$XDG_CONFIG_HOME/donelist/donelist.json` 또는 `~/.config/donelist/donelist.json`
   - Windows: `%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- **환경 변수**: `OPENROUTER_API_KEY`, `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`(상위 우선순위에 없을 경우 사용).
+- **환경 변수**: `OPENROUTER_API_KEY`, `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`, `DONELIST_TRIM_DIFFS`(상위 우선순위에 없을 경우 사용).
 
 `npm install` 시 위 전역 경로에 기본 설정 파일이 없으면 자동으로 생성됩니다.
 
 기본값:
 
-- `lang`: `"ko"`
+- `lang`: `"en"`
 - `model`: 기본값 없음(옵션으로 지정 필요)
 - `verbose`: `false`
+- `trimDiffs`: `true` (커밋 diff가 6만자를 넘으면 잘라냅니다)
 
 설정은 우선순위에 따라 병합되며, 높은 우선순위가 낮은 우선순위를 덮어씁니다.
 
@@ -122,14 +125,21 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
   "lang": "ko",
   "model": "openai/gpt-4.1-mini",
   "openrouterKey": "sk-...",
-  "verbose": true
+  "verbose": true,
+  "trimDiffs": false
 }
 ```
 
 - JSON 파싱 오류나 파일 부재는 조용히 무시(기본값 사용).
 - API 키: CLI &gt; 설정 파일 &gt; 환경 변수(`OPENROUTER_API_KEY`) &gt; 빈 문자열(빈 경우 실패) 순으로 해석.
-- 필드: `lang` ("en"/"ko"/"ja"/"zh"), `model` (OpenRouter 모델 이름), `openrouterKey` (API 키), `verbose` (불린).
-- 환경 변수 추론: `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`. `DONELIST_VERBOSE`는 `true/1/yes/on` → true, `false/0/no/off` → false로 인식.
+- 필드: `lang` ("en"/"ko"/"ja"/"zh"), `model` (OpenRouter 모델 이름), `openrouterKey` (API 키), `verbose` (불린), `trimDiffs` (불린).
+- 환경 변수 추론: `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`, `DONELIST_TRIM_DIFFS`. 불리언 값은 `true/1/yes/on` → true, `false/0/no/off` → false로 처리합니다.
+
+### 작성자 자동 필터링
+
+- 기본적으로 로컬 Git 설정(`user.name`, `user.email`)을 읽어 해당 사용자 커밋만 포함되도록 필터링합니다.
+- `--author`(이름), `--author-email`(이메일)로 덮어쓸 수 있으며, 둘 다 있을 경우 이메일이 우선합니다.
+- 설정과 플래그 모두 없으면 작성자 필터는 적용되지 않습니다.
 
 ## 플랫폼 호환성 주의사항
 

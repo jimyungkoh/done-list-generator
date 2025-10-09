@@ -43,7 +43,7 @@ donelist --dry-run
 
 ```bash
 export OPENROUTER_API_KEY=YOUR_KEY   # Windows PowerShell: $env:OPENROUTER_API_KEY="YOUR_KEY"
-npx donelist --lang ja               # en/ko/zh も可能（デフォルト: ko）
+npx donelist --lang ja               # en/ko/zh も可能（デフォルト: en）
 ```
 
 現在の作業ディレクトリに `./done-list/YYYY-MM-DD.md` ファイルが生成されます。
@@ -61,7 +61,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--openrouter-key <key>] [--since <iso>] [--until <iso>]
 ```
 
-- `--lang <code>`: 出力言語(デフォルト: `ko`)。設定ファイルの上書き。
+- `--lang <code>`: 出力言語(デフォルト: `en`)。設定ファイルの上書き。
 - `--model <name>`: OpenRouter モデル指定(オプション)。設定ファイルの上書き。
 - `--openrouter-key <key>`: 指定なしの場合、設定ファイルまたは `OPENROUTER_API_KEY` 環境変数を使用。
 - `--dry-run`: ファイルを保存せずコンソールに出力。
@@ -103,15 +103,16 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - **グローバル設定**（ユーザー範囲）：
   - Unix：`$XDG_CONFIG_HOME/donelist/donelist.json` または `~/.config/donelist/donelist.json`
   - Windows：`%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- **環境変数**：`OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`（優先度の高いものに未指定の場合に使用）
+- **環境変数**：`OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`、`DONELIST_TRIM_DIFFS`（優先度の高いものに未指定の場合に使用）
 
 `npm install` 時に上記のグローバルパスに設定ファイルが無ければ自動生成されます。
 
 デフォルト値：
 
-- `lang`: `"ko"`
+- `lang`: `"en"`
 - `model`: 既定なし（CLI/設定で指定）
 - `verbose`: `false`
+- `trimDiffs`: `true`（コミット diff が 6 万文字を超えると切り詰めます）
 
 設定は優先度に従ってマージされ、優先度の高いものが低いものを上書きします。
 
@@ -122,14 +123,15 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
   "lang": "ko",
   "model": "openai/gpt-4.1-mini",
   "openrouterKey": "sk-...",
-  "verbose": true
+  "verbose": true,
+  "trimDiffs": false
 }
 ```
 
 - JSON パースエラーやファイル欠如は静かに無視(デフォルト使用)。
 - API キー: CLI &gt; 設定ファイル &gt; 環境変数(`OPENROUTER_API_KEY`) &gt; 空文字列(空の場合失敗) の順で解決。
-- フィールド: `lang` ("en"/"ko"/"ja"/"zh")、 `model` (OpenRouter モデル名)、 `openrouterKey` (API キー)、 `verbose` (ブール値)。
-- 環境変数の解釈: `DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`。`DONELIST_VERBOSE` は `true/1/yes/on` → true、`false/0/no/off` → false と判定。
+- フィールド: `lang` ("en"/"ko"/"ja"/"zh")、`model` (OpenRouter モデル名)、`openrouterKey` (API キー)、`verbose` (ブール値)、`trimDiffs` (ブール値)。
+- 環境変数の解釈: `DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`、`DONELIST_TRIM_DIFFS`。`true/1/yes/on` → true、`false/0/no/off` → false と判定します。
 
 ## プラットフォーム互換性の注意事項
 
