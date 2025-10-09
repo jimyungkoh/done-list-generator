@@ -63,12 +63,12 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--openrouter-key <key>] [--since <iso>] [--until <iso>]
 ```
 
-- `--lang <code>`: Output language (default: `ko`).
-- `--model <name>`: OpenRouter model (optional).
-- `--openrouter-key <key>`: If omitted, uses `OPENROUTER_API_KEY` env var.
+- `--lang <code>`: Output language (default: `ko`). Overrides config.
+- `--model <name>`: OpenRouter model (optional). Overrides config.
+- `--openrouter-key <key>`: If omitted, uses config or `OPENROUTER_API_KEY` env var.
 - `--dry-run`: Print to STDOUT without writing files.
 - `--since <iso>` / `--until <iso>`: Manually set time window.
-- `--verbose`: Extra diagnostics.
+- `--verbose`: Extra diagnostics. Overrides config.
 
 ## Output
 
@@ -99,9 +99,31 @@ On subsequent runs (same day), it appends:
 
 ## Configuration & Environment
 
-- Primary configuration is via CLI flags and environment variables.
-- `OPENROUTER_API_KEY` must be set or provided via `--openrouter-key`.
-- No separate config file is required.
+The tool supports layered configuration with clear precedence (highest first):
+
+- CLI flags: overrides any other source (e.g., `--lang en --model xxx --openrouter-key yyy --verbose`).
+- Local config files (project root): `.donelist.json` (higher) or `donelist.json`.
+- Global config (user scope):
+  - Unix: `$XDG_CONFIG_HOME/donelist/donelist.json` or `~/.config/donelist/donelist.json`
+  - Windows: `%USERPROFILE%/AppData/Local/donelist/donelist.json`
+- Environment: `OPENROUTER_API_KEY` is used if not provided via CLI/config.
+
+Defaults:
+
+- `lang`: `"ko"`
+- `model`: no default (provide via CLI/config)
+- `verbose`: `false`
+
+Example config file (`donelist.json` or `.donelist.json`):
+
+```json
+{
+  "lang": "ko",
+  "model": "openai/gpt-4.1-mini",
+  "openrouterKey": "sk-...",
+  "verbose": true
+}
+```
 
 ## Cross‑platform notes
 

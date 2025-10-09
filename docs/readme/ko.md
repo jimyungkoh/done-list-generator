@@ -61,12 +61,12 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--openrouter-key <key>] [--since <iso>] [--until <iso>]
 ```
 
-- `--lang <code>`: 출력 언어(기본: `ko`).
-- `--model <name>`: OpenRouter 모델 지정(선택 사항).
-- `--openrouter-key <key>`: 지정하지 않으면 환경 변수 `OPENROUTER_API_KEY`를 사용합니다.
+- `--lang <code>`: 출력 언어(기본: `ko`). 설정 파일 덮어씀.
+- `--model <name>`: OpenRouter 모델 지정(선택 사항). 설정 파일 덮어씀.
+- `--openrouter-key <key>`: 지정하지 않으면 설정 파일 또는 `OPENROUTER_API_KEY` 환경 변수를 사용.
 - `--dry-run`: 파일을 저장하지 않고 콘솔에 출력합니다.
 - `--since <iso>` / `--until <iso>`: 시간 범위를 수동으로 설정합니다.
-- `--verbose`: 상세 로그 출력.
+- `--verbose`: 상세 로그 출력. 설정 파일 덮어씀.
 
 ## 출력 형식
 
@@ -96,10 +96,37 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 
 ## 설정 및 환경
 
-CLI 옵션과 환경 변수를 통해 간단히 설정할 수 있습니다.
+도구는 유연성을 위해 계층화된 설정을 지원합니다(우선순위: 높음 → 낮음):
 
-- `OPENROUTER_API_KEY` 환경 변수 또는 `--openrouter-key` 옵션으로 API 키를 제공하세요.
-- 별도의 설정 파일은 필요 없습니다.
+- **CLI 플래그**: 예) `--lang en --model xxx --openrouter-key yyy --verbose`.
+- **로컬 설정 파일**(프로젝트 루트): `.donelist.json` → `donelist.json`.
+- **전역 설정**(사용자 범위):
+  - Unix: `$XDG_CONFIG_HOME/donelist/donelist.json` 또는 `~/.config/donelist/donelist.json`
+  - Windows: `%USERPROFILE%/AppData/Local/donelist/donelist.json`
+- **환경 변수**: `OPENROUTER_API_KEY`(설정/CLI에 없을 때 사용).
+
+기본값:
+
+- `lang`: `"ko"`
+- `model`: 기본값 없음(옵션으로 지정 필요)
+- `verbose`: `false`
+
+설정은 우선순위에 따라 병합되며, 높은 우선순위가 낮은 우선순위를 덮어씁니다.
+
+### 예시 로컬 설정 (`donelist.json` 또는 `.donelist.json`)
+
+```json
+{
+  "lang": "ko",
+  "model": "openai/gpt-4.1-mini",
+  "openrouterKey": "sk-...",
+  "verbose": true
+}
+```
+
+- JSON 파싱 오류나 파일 부재는 조용히 무시(기본값 사용).
+- API 키: 설정 파일 &gt; 환경 변수 &gt; 빈 문자열(빈 경우 실패) 순으로 해석.
+- 필드: `lang` ("en"/"ko"/"ja"/"zh"), `model` (OpenRouter 모델 이름), `openrouterKey` (API 키), `verbose` (불린).
 
 ## 플랫폼 호환성 주의사항
 

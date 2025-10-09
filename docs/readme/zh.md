@@ -61,12 +61,12 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--openrouter-key <key>] [--since <iso>] [--until <iso>]
 ```
 
-- `--lang <code>`：输出语言（默认：`ko`）。
-- `--model <name>`：指定 OpenRouter 模型（可选）。
-- `--openrouter-key <key>`：未指定时使用环境变量 `OPENROUTER_API_KEY`。
+- `--lang <code>`：输出语言(默认：`ko`)。覆盖配置。
+- `--model <name>`：指定 OpenRouter 模型(可选)。覆盖配置。
+- `--openrouter-key <key>`：省略时，使用配置或 `OPENROUTER_API_KEY` 环境变量。
 - `--dry-run`：仅输出到控制台，不保存文件。
 - `--since <iso>` / `--until <iso>`：手动设置时间范围。
-- `--verbose`：显示详细日志。
+- `--verbose`：显示详细日志。覆盖配置。
 
 ## 输出格式
 
@@ -96,10 +96,37 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 
 ## 配置与环境
 
-通过 CLI 选项和环境变量进行简单配置。
+工具支持分层配置（优先级：高 → 低）：
 
-- 使用 `OPENROUTER_API_KEY` 环境变量或 `--openrouter-key` 选项提供 API 密钥。
-- 无需单独配置文件。
+- **CLI 标志**：如 `--lang en --model xxx --openrouter-key yyy --verbose`。
+- **本地配置文件**（项目根目录）：`.donelist.json` → `donelist.json`。
+- **全局配置**（用户范围）：
+  - Unix：`$XDG_CONFIG_HOME/donelist/donelist.json` 或 `~/.config/donelist/donelist.json`
+  - Windows：`%USERPROFILE%/AppData/Local/donelist/donelist.json`
+- **环境变量**：仅当配置/CLI 未提供时读取 `OPENROUTER_API_KEY`。
+
+默认值：
+
+- `lang`: `"ko"`
+- `model`: 默认无（需通过 CLI/配置指定）
+- `verbose`: `false`
+
+配置按优先级合并，高优先级覆盖低优先级。
+
+### 示例本地配置 (`donelist.json` 或 `.donelist.json`)
+
+```json
+{
+  "lang": "ko",
+  "model": "openai/gpt-4.1-mini",
+  "openrouterKey": "sk-...",
+  "verbose": true
+}
+```
+
+- JSON 解析错误或文件缺失静默忽略(使用默认值)。
+- API 密钥：配置 &gt; 环境变量 &gt; 空字符串(空则失败) 顺序解析。
+- 字段：`lang` ("en"/"ko"/"ja"/"zh")、 `model` (OpenRouter 模型名)、 `openrouterKey` (API 密钥)、 `verbose` (布尔值)。
 
 ## 跨平台注意事项
 

@@ -61,12 +61,12 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--openrouter-key <key>] [--since <iso>] [--until <iso>]
 ```
 
-- `--lang <code>`: 出力言語（デフォルト: `ko`）。
-- `--model <name>`: OpenRouter モデルを指定（オプション）。
-- `--openrouter-key <key>`: 指定しない場合、環境変数 `OPENROUTER_API_KEY` を使用します。
-- `--dry-run`: ファイルを保存せずコンソールに出力します。
-- `--since <iso>` / `--until <iso>`: 時間範囲を手動設定します。
-- `--verbose`: 詳細ログを出力します。
+- `--lang <code>`: 出力言語(デフォルト: `ko`)。設定ファイルの上書き。
+- `--model <name>`: OpenRouter モデル指定(オプション)。設定ファイルの上書き。
+- `--openrouter-key <key>`: 指定なしの場合、設定ファイルまたは `OPENROUTER_API_KEY` 環境変数を使用。
+- `--dry-run`: ファイルを保存せずコンソールに出力。
+- `--since <iso>` / `--until <iso>`: 時間範囲を手動設定。
+- `--verbose`: 詳細ログ出力。設定ファイルの上書き。
 
 ## 出力形式
 
@@ -96,10 +96,37 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 
 ## 設定と環境
 
-CLI オプションと環境変数で簡単に設定できます。
+ツールは柔軟性のために階層化された設定をサポートします（優先度：高 → 低）：
 
-- `OPENROUTER_API_KEY` 環境変数または `--openrouter-key` オプションで API キーを提供してください。
-- 別途設定ファイルは不要です。
+- **CLI フラグ**：例）`--lang en --model xxx --openrouter-key yyy --verbose`
+- **ローカル設定ファイル**（プロジェクトルート）：`.donelist.json` → `donelist.json`
+- **グローバル設定**（ユーザー範囲）：
+  - Unix：`$XDG_CONFIG_HOME/donelist/donelist.json` または `~/.config/donelist/donelist.json`
+  - Windows：`%USERPROFILE%/AppData/Local/donelist/donelist.json`
+- **環境変数**：`OPENROUTER_API_KEY`（設定/CLI に未指定のとき使用）
+
+デフォルト値：
+
+- `lang`: `"ko"`
+- `model`: 既定なし（CLI/設定で指定）
+- `verbose`: `false`
+
+設定は優先度に従ってマージされ、優先度の高いものが低いものを上書きします。
+
+### ローカル設定の例 (`donelist.json` または `.donelist.json`)
+
+```json
+{
+  "lang": "ko",
+  "model": "openai/gpt-4.1-mini",
+  "openrouterKey": "sk-...",
+  "verbose": true
+}
+```
+
+- JSON パースエラーやファイル欠如は静かに無視(デフォルト使用)。
+- API キー: 設定ファイル &gt; 環境変数 &gt; 空文字列(空の場合失敗) の順で解決。
+- フィールド: `lang` ("en"/"ko"/"ja"/"zh")、 `model` (OpenRouter モデル名)、 `openrouterKey` (API キー)、 `verbose` (ブール値)。
 
 ## プラットフォーム互換性の注意事項
 
