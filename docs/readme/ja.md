@@ -103,7 +103,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - **グローバル設定**（ユーザー範囲）：
   - Unix：`$XDG_CONFIG_HOME/donelist/donelist.json` または `~/.config/donelist/donelist.json`
   - Windows：`%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- **環境変数**：`OPENROUTER_API_KEY`（設定/CLI に未指定のとき使用）
+- **環境変数**：`OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`（優先度の高いものに未指定の場合に使用）
 
 `npm install` 時に上記のグローバルパスに設定ファイルが無ければ自動生成されます。
 
@@ -127,8 +127,9 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```
 
 - JSON パースエラーやファイル欠如は静かに無視(デフォルト使用)。
-- API キー: 設定ファイル &gt; 環境変数 &gt; 空文字列(空の場合失敗) の順で解決。
+- API キー: CLI &gt; 設定ファイル &gt; 環境変数(`OPENROUTER_API_KEY`) &gt; 空文字列(空の場合失敗) の順で解決。
 - フィールド: `lang` ("en"/"ko"/"ja"/"zh")、 `model` (OpenRouter モデル名)、 `openrouterKey` (API キー)、 `verbose` (ブール値)。
+- 環境変数の解釈: `DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`。`DONELIST_VERBOSE` は `true/1/yes/on` → true、`false/0/no/off` → false と判定。
 
 ## プラットフォーム互換性の注意事項
 

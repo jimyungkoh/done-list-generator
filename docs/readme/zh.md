@@ -103,7 +103,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - **全局配置**（用户范围）：
   - Unix：`$XDG_CONFIG_HOME/donelist/donelist.json` 或 `~/.config/donelist/donelist.json`
   - Windows：`%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- **环境变量**：仅当配置/CLI 未提供时读取 `OPENROUTER_API_KEY`。
+- **环境变量**：仅当优先级更高的来源未提供时读取 `OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`。
 
 在执行 `npm install` 时，如果上述全局路径中没有配置文件，会自动创建一个默认文件。
 
@@ -127,8 +127,9 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```
 
 - JSON 解析错误或文件缺失静默忽略(使用默认值)。
-- API 密钥：配置 &gt; 环境变量 &gt; 空字符串(空则失败) 顺序解析。
+- API 密钥：CLI &gt; 配置文件 &gt; 环境变量(`OPENROUTER_API_KEY`) &gt; 空字符串(空则失败) 顺序解析。
 - 字段：`lang` ("en"/"ko"/"ja"/"zh")、 `model` (OpenRouter 模型名)、 `openrouterKey` (API 密钥)、 `verbose` (布尔值)。
+- 环境变量解析：`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`。`DONELIST_VERBOSE` 支持 `true/1/yes/on` → true，`false/0/no/off` → false。
 
 ## 跨平台注意事项
 

@@ -106,7 +106,7 @@ The tool supports layered configuration with clear precedence (highest first):
 - Global config (user scope):
   - Unix: `$XDG_CONFIG_HOME/donelist/donelist.json` or `~/.config/donelist/donelist.json`
   - Windows: `%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- Environment: `OPENROUTER_API_KEY` is used if not provided via CLI/config.
+- Environment: `OPENROUTER_API_KEY`, `DONELIST_LANG`, `DONELIST_MODEL`, and `DONELIST_VERBOSE` are used when higher-priority sources omit them.
 
 During `npm install`, the package initializes a default global config at the path above if none exists.
 
@@ -126,6 +126,10 @@ Example config file (`donelist.json` or `.donelist.json`):
   "verbose": true
 }
 ```
+
+- Fields: `lang` ("en"/"ko"/"ja"/"zh"), `model` (OpenRouter model name), `openrouterKey` (API key), `verbose` (boolean).
+- Environment fallbacks: `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`. Truthy values for `DONELIST_VERBOSE` include `true/1/yes/on`; falsy values include `false/0/no/off`.
+- API key resolution order: CLI > config file > environment (`OPENROUTER_API_KEY`) > empty string.
 
 ## Cross‑platform notes
 

@@ -103,7 +103,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - **전역 설정**(사용자 범위):
   - Unix: `$XDG_CONFIG_HOME/donelist/donelist.json` 또는 `~/.config/donelist/donelist.json`
   - Windows: `%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- **환경 변수**: `OPENROUTER_API_KEY`(설정/CLI에 없을 때 사용).
+- **환경 변수**: `OPENROUTER_API_KEY`, `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`(상위 우선순위에 없을 경우 사용).
 
 `npm install` 시 위 전역 경로에 기본 설정 파일이 없으면 자동으로 생성됩니다.
 
@@ -127,8 +127,9 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```
 
 - JSON 파싱 오류나 파일 부재는 조용히 무시(기본값 사용).
-- API 키: 설정 파일 &gt; 환경 변수 &gt; 빈 문자열(빈 경우 실패) 순으로 해석.
+- API 키: CLI &gt; 설정 파일 &gt; 환경 변수(`OPENROUTER_API_KEY`) &gt; 빈 문자열(빈 경우 실패) 순으로 해석.
 - 필드: `lang` ("en"/"ko"/"ja"/"zh"), `model` (OpenRouter 모델 이름), `openrouterKey` (API 키), `verbose` (불린).
+- 환경 변수 추론: `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`. `DONELIST_VERBOSE`는 `true/1/yes/on` → true, `false/0/no/off` → false로 인식.
 
 ## 플랫폼 호환성 주의사항
 
