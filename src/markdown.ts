@@ -33,7 +33,7 @@ export function appendIncrementSection(
     new RegExp(`<!--\\s*${LAST_COMMIT_MARK}:[^>]*-->`),
     `<!-- ${LAST_COMMIT_MARK}: ${latestCommit} -->`
   );
-  const append = `\n## 추가 업데이트 (${timeStr})\n\n${body}\n`;
+  const append = `\n## Additional Update (${timeStr})\n\n${body}\n`;
   return updatedHead + append;
 }
 

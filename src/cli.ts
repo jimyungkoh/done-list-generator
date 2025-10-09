@@ -1,14 +1,7 @@
 #!/usr/bin/env node
 import { join } from "node:path";
-import {
-  createConfigResolver,
-  type ConfigResolver,
-} from "./config.js";
-import {
-  createGitClient,
-  getTodayDateString,
-  type GitClient,
-} from "./git.js";
+import { createConfigResolver, type ConfigResolver } from "./config.js";
+import { createGitClient, getTodayDateString, type GitClient } from "./git.js";
 import {
   appendIncrementSection,
   extractLastProcessedCommitFromMarkdown,
@@ -16,10 +9,7 @@ import {
   renderNewMarkdown,
   writeText,
 } from "./markdown.js";
-import {
-  createOpenRouterClient,
-  type OpenRouterClient,
-} from "./openrouter.js";
+import { createOpenRouterClient, type OpenRouterClient } from "./openrouter.js";
 import type { CliOptions, CommitWithDiff } from "./types.js";
 
 const DIFF_TRIM_LIMIT = 60_000;
@@ -97,7 +87,7 @@ function buildPrompt(
         : c.diff;
     return `---\n${meta}\n\n${trimmedDiff}`;
   });
-  const user = `날짜: ${dateStr}\n요구사항: 변경사항을 액션 중심 bullet로 요약하고, 중복을 제거한 후 본문만 출력(상단 헤더는 출력 금지).\n\n## 요약\n(간결한 핵심 정리)\n\n## 상세\n- 변경 포인트를 항목별로 정리\n\n입력:\n${items.join(
+  const user = `Date: ${dateStr}\nRequirements: Summarize changes as action-oriented bullets, deduplicate, and output only the body (no top-level header).\n\n## Summary\n(Concise key points)\n\n## Details\n- Organize changes by item\n\nInput:\n${items.join(
     "\n\n"
   )}`;
   return { system, user };
@@ -220,9 +210,9 @@ export async function runCli(
 
   if (hashes.length === 0) {
     if (opts.dryRun) {
-      runtime.console.log("오늘 처리할 커밋이 없습니다.");
+      runtime.console.log("No commits to process today.");
     } else {
-      runtime.console.error("오늘 처리할 커밋이 없습니다.");
+      runtime.console.error("No commits to process today.");
     }
     return;
   }
@@ -274,7 +264,7 @@ export async function runCli(
     await runtime.markdown.writeText(outputPath, appended);
   }
 
-  runtime.console.log("생성됨:", outputPath);
+  runtime.console.log("Created:", outputPath);
 }
 
 const isDirectExecution = (): boolean => {
@@ -288,7 +278,7 @@ if (isDirectExecution()) {
   runCli(process.argv).catch((err) => {
     const consoleRuntime = createDefaultConsole();
     consoleRuntime.error(
-      "[오류]",
+      "[Error]",
       err instanceof Error ? err.message : String(err)
     );
     consoleRuntime.setExitCode(1);

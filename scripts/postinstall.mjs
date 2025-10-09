@@ -55,7 +55,7 @@ async function ensureDefaultConfig() {
     flag: "wx",
   });
   console.log(
-    `[done-list-generator] 기본 설정 파일을 생성했습니다: ${configPath}`
+    `[done-list-generator] Created default config file: ${configPath}`
   );
 }
 
@@ -65,6 +65,6 @@ void ensureDefaultConfig().catch((error) => {
       ? error.message
       : String(error);
   console.warn(
-    `[done-list-generator] 기본 설정 파일 생성에 실패했지만 설치는 계속됩니다: ${message}`
+    `[done-list-generator] Failed to create default config file, but installation will continue: ${message}`
   );
 });
