@@ -8,10 +8,12 @@ function runGit(
     const child = spawn("git", args, { shell: false });
     let stdout = "";
     let stderr = "";
-    child.stdout.on("data", (d) => (stdout += d.toString("utf8")));
-    child.stderr.on("data", (d) => (stderr += d.toString("utf8")));
-    child.on("close", (code) => resolve({ stdout, stderr, code: code ?? 0 }));
-    child.on("error", (err) => reject(err));
+    child.stdout.on("data", (d: any) => (stdout += d.toString("utf8")));
+    child.stderr.on("data", (d: any) => (stderr += d.toString("utf8")));
+    child.on("close", (code: any) =>
+      resolve({ stdout, stderr, code: code ?? 0 })
+    );
+    child.on("error", (err: any) => reject(err));
   });
 }
 
