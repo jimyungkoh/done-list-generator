@@ -148,7 +148,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - "No commits to process today"：指定时间范围内无提交。
 - "OpenRouter key missing"：设置 `OPENROUTER_API_KEY` 或使用 `--openrouter-key` 选项。
 
-## 贡献指南
+## 贡献指南 ([CONTRIBUTING](./CONTRIBUTING.md))
 
 欢迎贡献！请保持变更简单易读。优先考虑简洁性和跨平台兼容。
 

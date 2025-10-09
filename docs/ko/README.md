@@ -156,7 +156,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - "No commits to process today": 지정된 시간 범위에 커밋이 없습니다.
 - "OpenRouter key missing": `OPENROUTER_API_KEY`를 설정하거나 `--openrouter-key` 옵션을 사용하세요.
 
-## 기여 안내
+## 기여 안내 ([CONTRIBUTING](./CONTRIBUTING.md))
 
 기여를 환영합니다! 변경 사항은 간단하고 읽기 쉽게 유지해주세요. 단순성과 플랫폼 호환성을 최우선으로 합니다.
 
