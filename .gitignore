@@ -12,6 +12,10 @@ AGENTS.md
 
 # Docs
 /memo
+/done-list
 
 # Build
 /dist
+
+# Environment Files
+**/.env

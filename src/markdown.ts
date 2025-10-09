@@ -18,7 +18,7 @@ export function renderNewMarkdown(
   latestCommit: string,
   body: string
 ): string {
-  const header = `<!-- ${LAST_COMMIT_MARK}: ${latestCommit} -->\n# Done List - ${dateStr}\n\n## 요약\n\n`; // Summary is designed to be included in the LLM result body
+  const header = `<!-- ${LAST_COMMIT_MARK}: ${latestCommit} -->\n# Done List - ${dateStr}\n\n`;
   const tail = `\n`;
   return header + body + tail;
 }

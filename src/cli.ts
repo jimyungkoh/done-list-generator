@@ -47,7 +47,7 @@ function buildPrompt(
         : c.diff;
     return `---\n${meta}\n\n${trimmedDiff}`;
   });
-  const user = `날짜: ${dateStr}\n요구사항: 변경사항을 액션 중심 bullet로 요약하고, 중복을 제거한 후 \n\n# Done List - ${dateStr}\n## 요약\n(간결한 핵심 정리)\n\n## 상세\n- 변경 포인트를 항목별로 정리\n\n입력:\n${items.join(
+  const user = `날짜: ${dateStr}\n요구사항: 변경사항을 액션 중심 bullet로 요약하고, 중복을 제거한 후 본문만 출력(상단 헤더는 출력 금지).\n\n## 요약\n(간결한 핵심 정리)\n\n## 상세\n- 변경 포인트를 항목별로 정리\n\n입력:\n${items.join(
     "\n\n"
   )}`;
   return { system, user };

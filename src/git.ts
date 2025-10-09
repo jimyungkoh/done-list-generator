@@ -40,6 +40,8 @@ export async function getCommitHashesSinceUntil(
 ): Promise<string[]> {
   const args = [
     "-c",
+    "color.ui=false",
+    "-c",
     "core.quotepath=false",
     "--no-pager",
     "log",
@@ -63,6 +65,8 @@ export async function getCommitHashesRange(
     : toInclusive;
   const args = [
     "-c",
+    "color.ui=false",
+    "-c",
     "core.quotepath=false",
     "--no-pager",
     "log",
@@ -78,8 +82,9 @@ export async function getCommitMeta(hash: string): Promise<CommitMeta> {
   // %H hash, %an author, %ad author date (ISO-like), %s subject, %b body
   const pretty = "%H%n%an%n%ai%n%s%n%b";
   const { stdout, code, stderr } = await runGit([
+    "-c",
+    "color.ui=false",
     "--no-pager",
-    "--no-color",
     "show",
     `--pretty=format:${pretty}`,
     "-s",
@@ -102,11 +107,12 @@ export async function getCommitDiff(hash: string): Promise<string> {
   const { stdout, code, stderr } = await runGit([
     "-c",
     "core.quotepath=false",
+    "-c",
+    "color.ui=false",
     "--no-pager",
     "show",
     "--patch",
     "--unified=0",
-    "--no-color",
     hash,
   ]);
   if (code !== 0) throw new Error(`git show diff failed: ${stderr}`);
