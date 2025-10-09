@@ -7,6 +7,10 @@
   "bin": {
     "donelist": "./dist/cli.js"
   },
+  "files": [
+    "dist/",
+    "scripts/"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "node -e \"fs=require('fs');try{fs.rmSync('dist',{recursive:true,force:true})}catch(e){}\"",
