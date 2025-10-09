@@ -8,6 +8,9 @@ export interface CliOptions {
   since?: string; // ISO string
   until?: string; // ISO string
   verbose?: boolean;
+  trimDiffs?: boolean;
+  author?: string;
+  authorEmail?: string;
 }
 
 export interface CommitMeta {
@@ -33,6 +36,7 @@ export interface OpenRouterRequest {
   messages: Array<{ role: "system" | "user" | "assistant"; content: string }>;
   max_tokens?: number;
   temperature?: number;
+  stream?: boolean;
 }
 
 export interface OpenRouterResponseChoice {

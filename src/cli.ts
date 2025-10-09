@@ -6,6 +6,7 @@ import {
   collectCommitsWithDiff,
   getCommitHashesRange,
   getCommitHashesSinceUntil,
+  getDefaultAuthorFromGitConfig,
   getTodayDateString,
 } from "./git.js";
 import {
@@ -18,6 +19,8 @@ import {
 import { callOpenRouter } from "./openrouter.js";
 import type { CliOptions, CommitWithDiff } from "./types.js";
 
+const DIFF_TRIM_LIMIT = 60_000;
+
 function parseArgs(argv: string[]): CliOptions {
   const opts: CliOptions = {};
   for (let i = 2; i < argv.length; i++) {
@@ -29,6 +32,8 @@ function parseArgs(argv: string[]): CliOptions {
     else if (a === "--openrouter-key") opts.openrouterKey = argv[++i];
     else if (a === "--since") opts.since = argv[++i];
     else if (a === "--until") opts.until = argv[++i];
+    else if (a === "--author") opts.author = argv[++i];
+    else if (a === "--author-email") opts.authorEmail = argv[++i];
   }
   return opts;
 }
@@ -36,14 +41,15 @@ function parseArgs(argv: string[]): CliOptions {
 function buildPrompt(
   dateStr: string,
   lang: string,
-  commits: CommitWithDiff[]
+  commits: CommitWithDiff[],
+  trimDiffs: boolean
 ): { system: string; user: string } {
   const system = `You are a helper that concisely summarizes software development activities. Output language: ${lang}. The result should be in Markdown format.`;
   const items = commits.map((c) => {
     const meta = `commit ${c.meta.hash}\nauthor ${c.meta.authorName}\ndate ${c.meta.authorDate}\nsubject ${c.meta.subject}`;
     const trimmedDiff =
-      c.diff.length > 60_000
-        ? c.diff.slice(0, 60_000) + "\n...trimmed..."
+      trimDiffs && c.diff.length > DIFF_TRIM_LIMIT
+        ? c.diff.slice(0, DIFF_TRIM_LIMIT) + "\n...trimmed..."
         : c.diff;
     return `---\n${meta}\n\n${trimmedDiff}`;
   });
@@ -68,14 +74,29 @@ async function main() {
     ? extractLastProcessedCommitFromMarkdown(existing)
     : null;
 
+  // 작성자 필터 결정: CLI > config(미지원) > git config 자동
+  const defaultAuthor = await getDefaultAuthorFromGitConfig();
+  const authorFilter = {
+    name: opts.author ?? defaultAuthor.name ?? undefined,
+    email: opts.authorEmail ?? defaultAuthor.email ?? undefined,
+  } as { name?: string; email?: string };
+
   let hashes: string[] = [];
   if (opts.since || opts.until) {
-    hashes = await getCommitHashesSinceUntil(opts.since, opts.until);
+    hashes = await getCommitHashesSinceUntil(
+      opts.since,
+      opts.until,
+      authorFilter
+    );
   } else if (lastProcessed) {
-    hashes = await getCommitHashesRange(lastProcessed, "HEAD");
+    hashes = await getCommitHashesRange(lastProcessed, "HEAD", authorFilter);
   } else {
     const sinceLocal = `${dateStr} 00:00`;
-    hashes = await getCommitHashesSinceUntil(sinceLocal, undefined);
+    hashes = await getCommitHashesSinceUntil(
+      sinceLocal,
+      undefined,
+      authorFilter
+    );
   }
 
   if (hashes.length === 0) {
@@ -93,7 +114,12 @@ async function main() {
   const commits = await collectCommitsWithDiff(hashes);
   const latest = commits[0]?.meta.hash ?? hashes[0];
 
-  const { system, user } = buildPrompt(dateStr, lang, commits);
+  const { system, user } = buildPrompt(
+    dateStr,
+    lang,
+    commits,
+    resolved.trimDiffs
+  );
   const content = await callOpenRouter(
     apiKey,
     {

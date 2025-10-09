@@ -17,8 +17,68 @@ function runGit(
   });
 }
 
+function withStandardGitArgs(args: string[]): string[] {
+  return [
+    "-c",
+    "color.ui=false",
+    "-c",
+    "core.quotepath=false",
+    "--no-pager",
+    ...args,
+  ];
+}
+
+async function runGitStd(
+  args: string[]
+): Promise<{ stdout: string; stderr: string; code: number }> {
+  return runGit(withStandardGitArgs(args));
+}
+
+// 기능 감지를 단순화: help -a 파싱 없이 실행 결과 기반으로만 폴백 처리
+
+export async function tryRunGitStd(
+  args: string[]
+): Promise<{ ok: boolean; stdout: string; stderr: string; code: number }> {
+  const { stdout, stderr, code } = await runGitStd(args);
+  return { ok: code === 0, stdout, stderr, code };
+}
+
+export async function getCurrentBranch(): Promise<string> {
+  const attempt = await tryRunGitStd(["branch", "--show-current"]);
+  const name = attempt.stdout.trim();
+  if (attempt.ok && name) return name;
+  const { stdout, code, stderr } = await runGitStd([
+    "rev-parse",
+    "--abbrev-ref",
+    "HEAD",
+  ]);
+  if (code !== 0) throw new Error(`git rev-parse failed: ${stderr}`);
+  return stdout.trim();
+}
+
+export async function getGitConfigValue(key: string): Promise<string | null> {
+  const { stdout, code } = await runGitStd(["config", "--get", key]);
+  if (code !== 0) return null;
+  const value = stdout.trim();
+  return value.length > 0 ? value : null;
+}
+
+export async function getDefaultAuthorFromGitConfig(): Promise<{
+  name: string | null;
+  email: string | null;
+}> {
+  const [name, email] = await Promise.all([
+    getGitConfigValue("user.name"),
+    getGitConfigValue("user.email"),
+  ]);
+  return { name, email };
+}
+
 export async function assertInsideGitRepo(): Promise<void> {
-  const { stdout, code } = await runGit(["rev-parse", "--is-inside-work-tree"]);
+  const { stdout, code } = await runGitStd([
+    "rev-parse",
+    "--is-inside-work-tree",
+  ]);
   if (code !== 0 || stdout.trim() !== "true") {
     throw new Error(
       "The current directory is not a Git repository. Run git init or execute in a proper repository."
@@ -36,20 +96,17 @@ export async function getTodayDateString(): Promise<string> {
 
 export async function getCommitHashesSinceUntil(
   since?: string,
-  until?: string
+  until?: string,
+  author?: { name?: string | null; email?: string | null }
 ): Promise<string[]> {
-  const args = [
-    "-c",
-    "color.ui=false",
-    "-c",
-    "core.quotepath=false",
-    "--no-pager",
-    "log",
-    "--format=%H",
-  ];
+  const args = ["log", "--format=%H"];
   if (since) args.push(`--since=${since}`);
   if (until) args.push(`--until=${until}`);
-  const { stdout, code, stderr } = await runGit(args);
+  if (author) {
+    if (author.email) args.push(`--author=${author.email}`);
+    else if (author.name) args.push(`--author=${author.name}`);
+  }
+  const { stdout, code, stderr } = await runGitStd(args);
   if (code !== 0) {
     throw new Error(`git log failed: ${stderr}`);
   }
@@ -58,22 +115,18 @@ export async function getCommitHashesSinceUntil(
 
 export async function getCommitHashesRange(
   fromExclusive: string | null,
-  toInclusive: string = "HEAD"
+  toInclusive: string = "HEAD",
+  author?: { name?: string | null; email?: string | null }
 ): Promise<string[]> {
   const range = fromExclusive
     ? `${fromExclusive}..${toInclusive}`
     : toInclusive;
-  const args = [
-    "-c",
-    "color.ui=false",
-    "-c",
-    "core.quotepath=false",
-    "--no-pager",
-    "log",
-    "--format=%H",
-    range,
-  ];
-  const { stdout, code, stderr } = await runGit(args);
+  const args = ["log", "--format=%H", range];
+  if (author) {
+    if (author.email) args.push(`--author=${author.email}`);
+    else if (author.name) args.push(`--author=${author.name}`);
+  }
+  const { stdout, code, stderr } = await runGitStd(args);
   if (code !== 0) throw new Error(`git log failed: ${stderr}`);
   return stdout.split(/\r?\n/).filter(Boolean);
 }
@@ -81,10 +134,7 @@ export async function getCommitHashesRange(
 export async function getCommitMeta(hash: string): Promise<CommitMeta> {
   // %H hash, %an author, %ad author date (ISO-like), %s subject, %b body
   const pretty = "%H%n%an%n%ai%n%s%n%b";
-  const { stdout, code, stderr } = await runGit([
-    "-c",
-    "color.ui=false",
-    "--no-pager",
+  const { stdout, code, stderr } = await runGitStd([
     "show",
     `--pretty=format:${pretty}`,
     "-s",
@@ -104,12 +154,7 @@ export async function getCommitMeta(hash: string): Promise<CommitMeta> {
 }
 
 export async function getCommitDiff(hash: string): Promise<string> {
-  const { stdout, code, stderr } = await runGit([
-    "-c",
-    "core.quotepath=false",
-    "-c",
-    "color.ui=false",
-    "--no-pager",
+  const { stdout, code, stderr } = await runGitStd([
     "show",
     "--patch",
     "--unified=0",

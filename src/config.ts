@@ -7,6 +7,7 @@ export interface AppConfig {
   model?: string;
   openrouterKey?: string;
   verbose?: boolean;
+  trimDiffs?: boolean;
 }
 
 async function fileExists(filePath: string): Promise<boolean> {
@@ -72,10 +73,11 @@ export async function loadConfigFile(cwd: string): Promise<LoadedConfigResult> {
 }
 
 export interface ResolvedConfig {
-  lang: string; // default to "ko"
+  lang: string; // default to "en"
   model?: string;
   openrouterKey: string; // may be empty string; upstream will validate
   verbose?: boolean;
+  trimDiffs: boolean;
   configPath: string | null;
 }
 
@@ -114,17 +116,51 @@ function getEnvVerbose(): boolean | undefined {
   return undefined;
 }
 
+function getEnvTrimDiffs(): boolean | undefined {
+  const raw = process.env.DONELIST_TRIM_DIFFS;
+  if (raw === undefined) {
+    return undefined;
+  }
+  const normalized = raw.trim().toLowerCase();
+  if (
+    normalized === "true" ||
+    normalized === "1" ||
+    normalized === "yes" ||
+    normalized === "on"
+  ) {
+    return true;
+  }
+  if (
+    normalized === "false" ||
+    normalized === "0" ||
+    normalized === "no" ||
+    normalized === "off"
+  ) {
+    return false;
+  }
+  return undefined;
+}
+
 export async function resolveConfig(opts: CliOptions): Promise<ResolvedConfig> {
   const { config, sourcePath } = await loadConfigFile(process.cwd());
 
-  const lang = opts.lang ?? config.lang ?? getEnvLang() ?? "ko";
+  const lang = opts.lang ?? config.lang ?? getEnvLang() ?? "en";
   const model = opts.model ?? config.model ?? getEnvModel();
   const verbose = opts.verbose ?? config.verbose ?? getEnvVerbose();
+  const trimDiffs =
+    opts.trimDiffs ?? config.trimDiffs ?? getEnvTrimDiffs() ?? true;
   const openrouterKey =
     opts.openrouterKey ??
     config.openrouterKey ??
     process.env.OPENROUTER_API_KEY ??
     "";
 
-  return { lang, model, openrouterKey, verbose, configPath: sourcePath };
+  return {
+    lang,
+    model,
+    openrouterKey,
+    verbose,
+    trimDiffs,
+    configPath: sourcePath,
+  };
 }
