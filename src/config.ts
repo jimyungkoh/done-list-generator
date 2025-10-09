@@ -79,12 +79,47 @@ export interface ResolvedConfig {
   configPath: string | null;
 }
 
+function getEnvLang(): string | undefined {
+  const raw = process.env.DONELIST_LANG;
+  return raw && raw.trim().length > 0 ? raw.trim() : undefined;
+}
+
+function getEnvModel(): string | undefined {
+  const raw = process.env.DONELIST_MODEL;
+  return raw && raw.trim().length > 0 ? raw.trim() : undefined;
+}
+
+function getEnvVerbose(): boolean | undefined {
+  const raw = process.env.DONELIST_VERBOSE;
+  if (raw === undefined) {
+    return undefined;
+  }
+  const normalized = raw.trim().toLowerCase();
+  if (
+    normalized === "true" ||
+    normalized === "1" ||
+    normalized === "yes" ||
+    normalized === "on"
+  ) {
+    return true;
+  }
+  if (
+    normalized === "false" ||
+    normalized === "0" ||
+    normalized === "no" ||
+    normalized === "off"
+  ) {
+    return false;
+  }
+  return undefined;
+}
+
 export async function resolveConfig(opts: CliOptions): Promise<ResolvedConfig> {
   const { config, sourcePath } = await loadConfigFile(process.cwd());
 
-  const lang = opts.lang ?? config.lang ?? "ko";
-  const model = opts.model ?? config.model;
-  const verbose = opts.verbose ?? config.verbose;
+  const lang = opts.lang ?? config.lang ?? getEnvLang() ?? "ko";
+  const model = opts.model ?? config.model ?? getEnvModel();
+  const verbose = opts.verbose ?? config.verbose ?? getEnvVerbose();
   const openrouterKey =
     opts.openrouterKey ??
     config.openrouterKey ??
