@@ -105,6 +105,8 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
   - Windows：`%USERPROFILE%/AppData/Local/donelist/donelist.json`
 - **环境变量**：仅当配置/CLI 未提供时读取 `OPENROUTER_API_KEY`。
 
+在执行 `npm install` 时，如果上述全局路径中没有配置文件，会自动创建一个默认文件。
+
 默认值：
 
 - `lang`: `"ko"`

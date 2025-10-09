@@ -105,6 +105,8 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
   - Windows: `%USERPROFILE%/AppData/Local/donelist/donelist.json`
 - **환경 변수**: `OPENROUTER_API_KEY`(설정/CLI에 없을 때 사용).
 
+`npm install` 시 위 전역 경로에 기본 설정 파일이 없으면 자동으로 생성됩니다.
+
 기본값:
 
 - `lang`: `"ko"`

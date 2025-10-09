@@ -108,6 +108,8 @@ The tool supports layered configuration with clear precedence (highest first):
   - Windows: `%USERPROFILE%/AppData/Local/donelist/donelist.json`
 - Environment: `OPENROUTER_API_KEY` is used if not provided via CLI/config.
 
+During `npm install`, the package initializes a default global config at the path above if none exists.
+
 Defaults:
 
 - `lang`: `"ko"`
