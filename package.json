@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "clean": "node -e \"fs=require('fs');try{fs.rmSync('dist',{recursive:true,force:true})}catch(e){}\"",
+    "postinstall": "node ./scripts/postinstall.mjs",
     "start": "node ./dist/cli.js",
     "dev": "node --enable-source-maps ./dist/cli.js --dry-run"
   },

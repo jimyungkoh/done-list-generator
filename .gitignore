@@ -1,8 +1,17 @@
-# Agents
+# IDEs
 /.cursor
+/.idea
+/.vscode
+
+# Node
+/node_modules
+
+# Agents
 /.crush
 AGENTS.md
 
+# Docs
 /memo
 
+# Build
 /dist
