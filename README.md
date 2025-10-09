@@ -8,7 +8,7 @@
 
 Generate a daily Done List (Markdown) from your local Git commits using an LLM (via OpenRouter). Cross-platform (Windows/macOS/Linux), Node 18+.
 
-[한국어](docs/readme/ko.md) [日本語](docs/readme/ja.md) [中文](docs/readme/zh.md)
+[한국어](docs/ko/README.md) [日本語](docs/ja/README.md) [中文](docs/zh/README.md)
 
 ## Features
 
@@ -156,7 +156,7 @@ The tool sends commit metadata and raw diffs (trimmed if large) to the LLM provi
 - "No commits to process today": no commits in the selected window.
 - "OpenRouter key missing": set `OPENROUTER_API_KEY` or pass `--openrouter-key`.
 
-## Contributing
+## Contributing ([CONTRIBUTING](./docs/en/CONTRIBUTING.md))
 
 Contributions are welcome! Please keep changes simple and readable. Simplicity-first and cross-platform safety are hard requirements.
 

@@ -1,21 +1,44 @@
-# IDEs
-/.cursor
-/.idea
-/.vscode
+# Logs
+logs
+*.log
+npm-debug.log*
 
-# Node
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage & test output
+coverage/
+.nyc_output/
+*.lcov
+
+# Dependency directories & caches
 /node_modules
+.eslintcache
+.cache/
 
-# Agents
-/.crush
-AGENTS.md
+# Build artifacts
+/dist
+/build
+/out
 
-# Docs
+# project-specific
 /memo
 /done-list
 
-# Build
-/dist
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.code-workspace
 
-# Environment Files
+# Environment files
 **/.env
+**/.env.*
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
