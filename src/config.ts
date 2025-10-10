@@ -1,6 +1,9 @@
-import { readFile as defaultReadFile, stat as defaultStat } from "node:fs/promises";
+import {
+  readFile as defaultReadFile,
+  stat as defaultStat,
+} from "node:fs/promises";
 import { join } from "node:path";
-import type { CliOptions } from "./types.js";
+import type { CliOptions, OutputMode } from "./types.js";
 
 export interface AppConfig {
   lang?: string;
@@ -8,6 +11,7 @@ export interface AppConfig {
   openrouterKey?: string;
   verbose?: boolean;
   trimDiffs?: boolean;
+  mode?: OutputMode;
 }
 
 export interface LoadedConfigResult {
@@ -22,6 +26,7 @@ export interface ResolvedConfig {
   verbose?: boolean;
   trimDiffs: boolean;
   configPath: string | null;
+  mode: OutputMode;
 }
 
 export interface ConfigFileSystem {
@@ -68,7 +73,9 @@ export interface ConfigResolver {
   resolveConfig(opts: CliOptions): Promise<ResolvedConfig>;
 }
 
-export function createConfigResolver(context: ConfigContext = {}): ConfigResolver {
+export function createConfigResolver(
+  context: ConfigContext = {}
+): ConfigResolver {
   const env: Record<string, string | undefined> = context.env ?? process.env;
   const platform = context.platform ?? process.platform;
   const cwd = context.cwd ?? process.cwd();
@@ -153,21 +160,44 @@ export function createConfigResolver(context: ConfigContext = {}): ConfigResolve
   const getEnvTrimDiffs = (): boolean | undefined =>
     resolveBooleanEnv(env.DONELIST_TRIM_DIFFS);
 
+  const getEnvMode = (): OutputMode | undefined => {
+    const raw = env.DONELIST_MODE;
+    if (!raw) return undefined;
+    const v = raw.trim().toLowerCase();
+    return v === "summary" || v === "detailed" ? (v as OutputMode) : undefined;
+  };
+
   const resolveConfigInner = async (
     opts: CliOptions
   ): Promise<ResolvedConfig> => {
     const { config, sourcePath } = await loadConfigFile();
 
-    const lang = opts.lang ?? config.lang ?? getEnvLang() ?? "en";
-    const model = opts.model ?? config.model ?? getEnvModel();
-    const verbose = opts.verbose ?? config.verbose ?? getEnvVerbose();
+    // Normalize empty strings as undefined for correct fallback
+    const nonEmpty = (v?: string): string | undefined =>
+      v && v.trim().length > 0 ? v.trim() : undefined;
+
+    // Precedence: CLI > Config > ENV > Defaults
+    const lang =
+      nonEmpty(opts.lang) ?? nonEmpty(config.lang) ?? getEnvLang() ?? "en";
+    const model =
+      nonEmpty(opts.model) ?? nonEmpty(config.model) ?? getEnvModel();
+    const verbose =
+      opts.verbose ??
+      (config.verbose as boolean | undefined) ??
+      getEnvVerbose();
     const trimDiffs =
-      opts.trimDiffs ?? config.trimDiffs ?? getEnvTrimDiffs() ?? true;
+      opts.trimDiffs ?? (config.trimDiffs ?? getEnvTrimDiffs() ?? true);
     const openrouterKey =
-      opts.openrouterKey ??
-      config.openrouterKey ??
-      env.OPENROUTER_API_KEY ??
+      nonEmpty(opts.openrouterKey) ??
+      nonEmpty(config.openrouterKey) ??
+      nonEmpty(env.OPENROUTER_API_KEY) ??
       "";
+
+    const mode: OutputMode =
+      (nonEmpty(opts.mode) as OutputMode | undefined) ??
+      (config.mode as OutputMode | undefined) ??
+      getEnvMode() ??
+      "summary";
 
     return {
       lang,
@@ -176,6 +206,7 @@ export function createConfigResolver(context: ConfigContext = {}): ConfigResolve
       verbose,
       trimDiffs,
       configPath: sourcePath,
+      mode,
     };
   };
 
