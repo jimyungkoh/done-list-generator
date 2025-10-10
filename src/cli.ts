@@ -68,16 +68,30 @@ export function parseArgs(argv: string[]): CliOptions {
     else if (a === "--until") opts.until = argv[++i];
     else if (a === "--author") opts.author = argv[++i];
     else if (a === "--author-email") opts.authorEmail = argv[++i];
+    else if (a === "--mode") opts.mode = argv[++i] as any; // validated later via config
   }
   return opts;
+}
+
+function getLocalizedLabels(language: string): {
+  summary: string;
+  details: string;
+} {
+  const lang = (language || "").toLowerCase();
+  if (lang.startsWith("ko")) return { summary: "요약", details: "세부 사항" };
+  if (lang.startsWith("ja")) return { summary: "要約", details: "詳細" };
+  if (lang.startsWith("zh")) return { summary: "摘要", details: "详情" };
+  return { summary: "Summary", details: "Details" };
 }
 
 function buildPrompt(
   dateStr: string,
   lang: string,
   commits: CommitWithDiff[],
-  trimDiffs: boolean
+  trimDiffs: boolean,
+  mode: "summary" | "detailed"
 ): { system: string; user: string } {
+  const { summary, details } = getLocalizedLabels(lang);
   const system = `You are a helper that concisely summarizes software development activities. Output language: ${lang}. The result should be in Markdown format.`;
   const items = commits.map((c) => {
     const meta = `commit ${c.meta.hash}\nauthor ${c.meta.authorName}\ndate ${c.meta.authorDate}\nsubject ${c.meta.subject}`;
@@ -87,10 +101,22 @@ function buildPrompt(
         : c.diff;
     return `---\n${meta}\n\n${trimmedDiff}`;
   });
-  const user = `Date: ${dateStr}\nRequirements: Summarize changes as action-oriented bullets, deduplicate, and output only the body (no top-level header).\n\n## Summary\n(Concise key points)\n\n## Details\n- Organize changes by item\n\nInput:\n${items.join(
+  const sections =
+    mode === "summary"
+      ? `## ${summary}\n(Concise key points)`
+      : `## ${summary}\n(Concise key points)\n\n## ${details}\n- Organize changes by item`;
+  const user = `Date: ${dateStr}\nRequirements: Summarize changes as action-oriented bullets, deduplicate, and output only the body (no top-level header). Use section headings exactly as shown below.\n\n${sections}\n\nInput:\n${items.join(
     "\n\n"
   )}`;
   return { system, user };
+}
+
+function normalizeHeadingsToLocalized(content: string, lang: string): string {
+  const { summary, details } = getLocalizedLabels(lang);
+  let out = content;
+  out = out.replace(/^##\s*Summary\s*$/gim, `## ${summary}`);
+  out = out.replace(/^##\s*Details\s*$/gim, `## ${details}`);
+  return out;
 }
 
 function createDefaultMarkdown(): MarkdownRuntime {
@@ -224,9 +250,10 @@ export async function runCli(
     dateStr,
     lang,
     commits,
-    resolved.trimDiffs
+    resolved.trimDiffs,
+    resolved.mode
   );
-  const content = await runtime.openRouter.call(
+  const contentRaw = await runtime.openRouter.call(
     apiKey,
     {
       model: resolved.model ?? opts.model,
@@ -237,6 +264,7 @@ export async function runCli(
     },
     resolved.verbose ?? opts.verbose
   );
+  const content = normalizeHeadingsToLocalized(contentRaw, lang);
 
   if (opts.dryRun) {
     runtime.console.log(content);
