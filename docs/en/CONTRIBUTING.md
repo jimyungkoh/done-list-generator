@@ -10,8 +10,9 @@ Thanks for your interest in contributing! Please read this guide before you star
 1. Open an issue for proposals/bugs or pick a labeled task (`good first issue`, `help wanted`).
 2. Fork and create a feature branch: `feature/<summary>` or `fix/<summary>`.
 3. Keep changes small and focused. Use Conventional Commits (below).
-4. Complete the manual verification checklist (below).
-5. Open a PR describing motivation, approach, and manual verification results.
+4. Install dependencies with `pnpm install` (pnpm 10+).
+5. Complete the manual verification checklist (below).
+6. Open a PR describing motivation, approach, and manual verification results.
 
 ## Conventional Commits
 - Format: `type: description`
@@ -25,10 +26,10 @@ Thanks for your interest in contributing! Please read this guide before you star
 - Rebase to keep history clean; prefer squash merge for PRs.
 
 ## Scripts
-- `npm run build`: build TypeScript output (`dist/`)
-- `npm run dev`: run compiled CLI in dry‑run mode (no file writes)
-- `npm run start`: run with file output enabled
-- `npm run clean`: remove `dist/` for a fresh build
+- `pnpm build`: build TypeScript output (`dist/`)
+- `pnpm dev`: run compiled CLI in dry‑run mode (no file writes)
+- `pnpm start`: run with file output enabled
+- `pnpm clean`: remove `dist/` for a fresh build
 
 ## Code Style
 - ESM, Node 18+. Import Node built‑ins with `node:` specifiers.
@@ -40,7 +41,7 @@ Thanks for your interest in contributing! Please read this guide before you star
 - Commit metadata and diffs (possibly trimmed) are sent to an LLM provider. Avoid using on sensitive repositories.
 
 ## Manual Verification Checklist
-1. `npm run build` succeeds
+1. `pnpm build` succeeds
 2. In a real Git repo, run:
    ```bash
    OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run

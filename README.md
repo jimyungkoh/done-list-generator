@@ -165,9 +165,11 @@ Contributions are welcome! Please keep changes simple and readable. Simplicity-f
 ```bash
 git clone <this-repo>
 cd done-list-generator
-npm i
-npm run build
+pnpm install
+pnpm build
 ```
+
+This repository uses pnpm (v10+) for development workflows. The published CLI remains installable through any Node package manager: `npx donelist --dry-run` or `npm i -g done-list-generator`.
 
 Try it locally inside any Git repo:
 
@@ -188,7 +190,7 @@ OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
 
 1. Fork the repo and create a feature branch.
 2. Implement changes with tests if applicable.
-3. Run `npm run build` and verify `npx donelist --dry-run` works in a real repo.
+3. Run `pnpm build` and verify `npx donelist --dry-run` works in a real repo.
 4. Open a PR describing the motivation and approach.
 
 ## License
