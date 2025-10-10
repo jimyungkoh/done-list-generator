@@ -157,9 +157,11 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```bash
 git clone <this-repo>
 cd done-list-generator
-npm i
-npm run build
+pnpm install
+pnpm build
 ```
+
+本仓库在开发流程中使用 pnpm (10+)。已发布的 CLI 仍可通过任意包管理器使用，例如 `npx donelist --dry-run` 或 `npm i -g done-list-generator`。
 
 在任意 Git 仓库中本地测试：
 
@@ -180,7 +182,7 @@ OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
 
 1. 分叉仓库并创建功能分支。
 2. 实现变更，并尽可能添加测试。
-3. 运行 `npm run build`，然后在实际仓库中验证 `npx donelist --dry-run`。
+3. 运行 `pnpm build`，然后在实际仓库中验证 `npx donelist --dry-run`。
 4. 打开 PR 时，描述动机和方法。
 
 ## 许可证
