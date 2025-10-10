@@ -16,6 +16,7 @@ coverage/
 
 # Dependency directories & caches
 /node_modules
+.pnpm-store/
 .eslintcache
 .cache/
 
