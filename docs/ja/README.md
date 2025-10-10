@@ -157,9 +157,11 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```bash
 git clone <this-repo>
 cd done-list-generator
-npm i
-npm run build
+pnpm install
+pnpm build
 ```
+
+このリポジトリは開発フローに pnpm (10+) を使用します。公開される CLI は引き続き任意のパッケージマネージャーから利用できます (`npx donelist --dry-run` や `npm i -g done-list-generator` など)。
 
 任意の Git リポジトリでローカルテスト：
 
@@ -180,7 +182,7 @@ OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
 
 - リポジトリをフォークし、機能ブランチを作成します。
 - 変更を実装し、可能であればテストを追加します。
-- `npm run build` を実行した後、実際のリポジトリで `npx donelist --dry-run` を確認してください。
+- `pnpm build` を実行した後、実際のリポジトリで `npx donelist --dry-run` を確認してください。
 - PR を開く際は、動機とアプローチを説明してください。
 
 ## ライセンス
