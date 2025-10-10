@@ -4,15 +4,15 @@
 [![npm downloads](https://img.shields.io/npm/dm/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
 ![Node >=18](https://img.shields.io/badge/Node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/jimyungkoh/done-list-generator/blob/main/LICENSE)
 
 > AI-powered CLI that turns your daily Git commits into a neat Markdown 'Done List' using LLMs ✨
 
-[![lang: 한국어](https://img.shields.io/badge/lang-%ED%95%9C%EA%B5%AD%EC%96%B4-blue?style=flat-square)](docs/ko/README.md)
-[![lang: 日本語](https://img.shields.io/badge/lang-%E6%97%A5%E6%9C%AC%E8%AA%9E-blue?style=flat-square)](docs/ja/README.md)
-[![lang: 简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue?style=flat-square)](docs/zh/README.md)
+[![lang: 한국어](https://img.shields.io/badge/lang-%ED%95%9C%EA%B5%AD%EC%96%B4-blue?style=flat-square)](https://github.com/jimyungkoh/done-list-generator/blob/main/docs/ko/README.md)
+[![lang: 日本語](https://img.shields.io/badge/lang-%E6%97%A5%E6%9C%AC%E8%AA%9E-blue?style=flat-square)](https://github.com/jimyungkoh/done-list-generator/blob/main/docs/ja/README.md)
+[![lang: 简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue?style=flat-square)](https://github.com/jimyungkoh/done-list-generator/blob/main/docs/zh/README.md)
 
-![done-list-generator logo](./docs/assets/logo.svg)
+![done-list-generator logo](https://raw.githubusercontent.com/jimyungkoh/done-list-generator/main/docs/assets/logo.svg)
 
 ## Features
 
@@ -187,7 +187,7 @@ The tool sends commit metadata and raw diffs (trimmed if large) to the LLM provi
 - "No commits to process today": no commits in the selected window.
 - "OpenRouter key missing": set `OPENROUTER_API_KEY` or pass `--openrouter-key`.
 
-## Contributing ([CONTRIBUTING](./docs/en/CONTRIBUTING.md))
+## Contributing ([CONTRIBUTING](https://github.com/jimyungkoh/done-list-generator/blob/main/docs/en/CONTRIBUTING.md))
 
 Contributions are welcome! Please keep changes simple and readable. Simplicity-first and cross-platform safety are hard requirements.
 
