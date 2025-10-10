@@ -165,9 +165,11 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```bash
 git clone <this-repo>
 cd done-list-generator
-npm i
-npm run build
+pnpm install
+pnpm build
 ```
+
+이 저장소는 개발 워크플로에 pnpm(10+)을 사용합니다. 배포된 CLI는 여전히 `npx donelist --dry-run` 또는 `npm i -g done-list-generator`처럼 어떤 패키지 매니저로도 설치해 사용할 수 있습니다.
 
 임의의 Git 저장소에서 로컬 테스트:
 
@@ -188,7 +190,7 @@ OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
 
 1. 저장소를 포크하고 기능 브랜치를 만듭니다.
 2. 변경 사항을 구현하고, 가능하다면 테스트를 추가합니다.
-3. `npm run build`를 실행한 후 실제 저장소에서 `npx donelist --dry-run`을 확인하세요.
+3. `pnpm build`를 실행한 후 실제 저장소에서 `npx donelist --dry-run`을 확인하세요.
 4. PR을 열 때 동기와 접근 방법을 설명하세요.
 
 ## 라이선스

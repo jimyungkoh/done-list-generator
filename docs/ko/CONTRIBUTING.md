@@ -10,8 +10,9 @@
 1. 이슈를 열어 제안/버그를 공유하거나, 라벨이 달린 작업(`good first issue`, `help wanted`)을 선택합니다.
 2. 포크 후 기능 브랜치를 만듭니다: `feature/<요약>` 또는 `fix/<요약>`.
 3. 작업 단위를 작고 명확하게 유지합니다. 커밋은 아래 컨벤션을 따릅니다.
-4. 수동 검증 체크리스트를 통과합니다(아래 참조).
-5. PR을 열고 동기, 접근 방법, 수동 검증 결과를 적습니다.
+4. `pnpm install`(pnpm 10+)로 의존성을 설치합니다.
+5. 수동 검증 체크리스트를 통과합니다(아래 참조).
+6. PR을 열고 동기, 접근 방법, 수동 검증 결과를 적습니다.
 
 ## 커밋 컨벤션 (Conventional Commits)
 - 형식: `type: 설명`
@@ -25,10 +26,10 @@
 - 필요 시 rebase로 히스토리를 정리하고, PR은 squash merge 권장.
 
 ## 개발 스크립트
-- `npm run build`: TypeScript 빌드(`dist/` 생성)
-- `npm run dev`: 컴파일된 CLI를 드라이런으로 실행(파일 저장 안 함)
-- `npm run start`: 파일 출력 활성화 실행
-- `npm run clean`: `dist/` 정리 후 재빌드용
+- `pnpm build`: TypeScript 빌드(`dist/` 생성)
+- `pnpm dev`: 컴파일된 CLI를 드라이런으로 실행(파일 저장 안 함)
+- `pnpm start`: 파일 출력 활성화 실행
+- `pnpm clean`: `dist/` 정리 후 재빌드용
 
 ## 코드 스타일
 - ESM, Node 18+. 내장 모듈은 `node:` 프리픽스로 임포트
@@ -41,7 +42,7 @@
 - 커밋 디프는 대용량 보호(트렁케이션) 로직이 있으며, 필요 시 문서의 경고를 재확인하세요
 
 ## 수동 검증 체크리스트
-1. `npm run build` 성공
+1. `pnpm build` 성공
 2. 임의의 Git 저장소에서 다음 실행
    ```bash
    OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
