@@ -8,7 +8,7 @@
 
 Generate a daily Done List (Markdown) from your local Git commits using an LLM (via OpenRouter). Cross-platform (Windows/macOS/Linux), Node 18+.
 
-[한국어](docs/ko/README.md) [日本語](docs/ja/README.md) [中文](docs/zh/README.md)
+[한국어](docs/ko/README.md) [日本語](docs/ja/README.md) [简体中文](docs/zh/README.md)
 
 ## Features
 
