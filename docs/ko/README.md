@@ -1,19 +1,29 @@
-# done-list-generator
+# done-list-generator 🧾
 
-[![npm version](https://img.shields.io/npm/v/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
+[![npm version](https://img.shields.io/npm/v/done-list-generator?style=flat-square&logo=npm)](https://www.npmjs.com/package/done-list-generator)
 [![npm downloads](https://img.shields.io/npm/dm/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
-![node >=18](https://img.shields.io/badge/node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
+![Node >=18](https://img.shields.io/badge/Node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](../../LICENSE)
 
-로컬 Git 커밋을 기반으로 일일 완료 목록(Done List)을 Markdown 형식으로 생성하는 도구입니다. OpenRouter를 통해 LLM을 활용하며, Windows/macOS/Linux에서 동작하며 Node.js 18 이상을 지원합니다.
+> AI 기반 CLI로, 로컬 Git 커밋을 아름다운 Markdown "Done List" 보고서로 변환합니다. OpenRouter(GPT/Claude/Gemini 등)를 통해 동작하며, Windows/macOS/Linux에서 사용 가능합니다.
+
+![done-list-generator logo](../assets/logo.svg)
 
 ## 주요 기능
 
 - 커밋과 변경 사항(diff)을 요약해 간결한 일일 Markdown 보고서를 만듭니다.
+- OpenRouter 단일 API로 GPT/Claude/Gemini 등 모델 사용
 - 증분 업데이트: 같은 날 추가 작업 시 기존 파일에 내용을 이어 붙입니다.
 - 외부 런타임 의존성 없음: 내장 `fetch`와 Git을 위한 기본 `child_process`만 사용합니다.
 - 플랫폼 호환성: Windows/macOS/Linux에서 안전하게 동작하며, 셸 인용 문제를 피합니다(인수 배열 사용).
+
+## 왜 done-list-generator인가요?
+
+- 매일 "Done List"를 손으로 쓰지 않아도 일관성 있게 유지
+- PR/스탠드업/체인지로그에 붙여 넣기 좋은 Markdown 생성
+- Git 사용자 정보(`user.name`/`user.email`) 기반 자동 필터링
+- 단순한 CLI, 계층형 설정, 합리적인 기본값
 
 ## 요구 사항
 
@@ -48,9 +58,26 @@ npx donelist --lang ko               # en/ja/zh도 가능(기본: en)
 
 현재 작업 디렉토리에 `./done-list/YYYY-MM-DD.md` 파일이 생성됩니다.
 
+## 예시 출력
+
+```markdown
+# Done List - 2025-10-10
+
+## Summary
+
+- Fixed build caching issue and improved CI stability
+- Added --verbose flag and author auto-filtering
+
+## Details
+
+- Update CI: cache restore logic for node_modules
+- CLI: introduce --verbose and better error messages
+- Docs: add language badges and example GIF placeholder
+```
+
 ## 커밋 범위 선택 기준
 
-- `./done-list/YYYY-MM-DD.md` 파일이 있고 `<!-- lastProcessedCommit: <hash> -->` 주석이 포함되어 있으면, `<hash>..HEAD` 범위의 커밋만 처리해 "추가 업데이트 (HH:mm)" 섹션을 파일 끝에 추가하고 헤더 해시를 업데이트합니다.
+- `./done-list/YYYY-MM-DD.md` 파일이 있고 `<!-- lastProcessedCommit: <hash> -->` 주석이 포함되어 있으면, `<hash>..HEAD` 범위의 커밋만 처리해 "Additional Update (HH:mm)" 섹션을 파일 끝에 추가하고 헤더 해시를 업데이트합니다.
 - 그렇지 않으면, 오늘 자정(YYYY-MM-DD 00:00)부터 현재까지의 커밋을 처리합니다.
 - `--since <iso>` 또는 `--until <iso>` 옵션으로 범위를 직접 지정할 수 있습니다.
 
@@ -77,13 +104,13 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```markdown
 <!-- lastProcessedCommit: <hash> -->
 
-# 완료 목록 - YYYY-MM-DD
+# Done List - YYYY-MM-DD
 
-## 요약
+## Summary
 
 ...
 
-## 세부 사항
+## Details
 
 - ...
 ```
@@ -91,7 +118,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 같은 날 후속 실행 시:
 
 ```markdown
-## 추가 업데이트 (HH:mm)
+## Additional Update (HH:mm)
 
 ...
 ```
@@ -192,6 +219,14 @@ OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
 2. 변경 사항을 구현하고, 가능하다면 테스트를 추가합니다.
 3. `pnpm build`를 실행한 후 실제 저장소에서 `npx donelist --dry-run`을 확인하세요.
 4. PR을 열 때 동기와 접근 방법을 설명하세요.
+
+## 기여자
+
+![contributors](https://img.shields.io/github/contributors/jimyungkoh/done-list-generator?style=flat-square)
+
+프로젝트가 마음에 드셨다면 ⭐ Star 및 PR 기여를 환영합니다!
+
+만든이: [@jimyungkoh](https://github.com/jimyungkoh)
 
 ## 라이선스
 

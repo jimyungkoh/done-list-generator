@@ -1,21 +1,33 @@
-# done-list-generator
+# done-list-generator 🧾
 
-[![npm version](https://img.shields.io/npm/v/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
+[![npm version](https://img.shields.io/npm/v/done-list-generator?style=flat-square&logo=npm)](https://www.npmjs.com/package/done-list-generator)
 [![npm downloads](https://img.shields.io/npm/dm/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
-![node >=18](https://img.shields.io/badge/node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
+![Node >=18](https://img.shields.io/badge/Node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
-Generate a daily Done List (Markdown) from your local Git commits using an LLM (via OpenRouter). Cross-platform (Windows/macOS/Linux), Node 18+.
+> AI-powered CLI that turns your daily Git commits into a beautiful Markdown "Done List" report. Works via OpenRouter (GPT, Claude, Gemini, etc.). Cross-platform (Windows/macOS/Linux).
 
-[한국어](docs/ko/README.md) [日本語](docs/ja/README.md) [简体中文](docs/zh/README.md)
+[![lang: 한국어](https://img.shields.io/badge/lang-%ED%95%9C%EA%B5%AD%EC%96%B4-blue?style=flat-square)](docs/ko/README.md)
+[![lang: 日本語](https://img.shields.io/badge/lang-%E6%97%A5%E6%9C%AC%E8%AA%9E-blue?style=flat-square)](docs/ja/README.md)
+[![lang: 简体中文](https://img.shields.io/badge/lang-%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-blue?style=flat-square)](docs/zh/README.md)
+
+![done-list-generator logo](./docs/assets/logo.svg)
 
 ## Features
 
 - Summarize commits and diffs into a concise daily Markdown report
+- Works with OpenRouter models (e.g., GPT, Claude, Gemini) via a single API
 - Incremental updates: appends to the same day's file as you keep working
 - Zero external runtime deps (uses built-in `fetch`, plain `child_process` for Git)
 - Cross-platform safe (no shell quoting tricks; argument arrays only)
+
+## Why use done-list-generator?
+
+- Keep a consistent daily "Done List" without manual notes
+- Generate developer-friendly Markdown you can paste into PRs, standups, or changelogs
+- Filter by your Git identity automatically (reads `user.name` / `user.email`)
+- Simple CLI with layered configuration and sensible defaults
 
 ## Requirements
 
@@ -50,9 +62,26 @@ npx donelist --lang ko               # or en/ja/zh (default: en)
 
 This generates `./done-list/YYYY-MM-DD.md` in your current working directory.
 
+## Example Output
+
+```markdown
+# Done List - 2025-10-10
+
+## Summary
+
+- Fixed build caching issue and improved CI stability
+- Added --verbose flag and author auto-filtering
+
+## Details
+
+- Update CI: cache restore logic for node_modules
+- CLI: introduce --verbose and better error messages
+- Docs: add language badges and example GIF placeholder
+```
+
 ## How it chooses commit range
 
-- If `./done-list/YYYY-MM-DD.md` exists and contains `<!-- lastProcessedCommit: <hash> -->`, it processes commits in `<hash>..HEAD` and appends an "Additional updates (HH:mm)" section to the file, updating the header hash.
+- If `./done-list/YYYY-MM-DD.md` exists and contains `<!-- lastProcessedCommit: <hash> -->`, it processes commits in `<hash>..HEAD` and appends an "Additional Update (HH:mm)" section to the file, updating the header hash.
 - Otherwise, it processes commits from local midnight (`YYYY-MM-DD 00:00`) to now.
 - You can override with `--since <iso>` and/or `--until <iso>`.
 
@@ -94,7 +123,7 @@ The file starts with a header comment storing the last processed commit:
 On subsequent runs (same day), it appends:
 
 ```markdown
-## Additional updates (HH:mm)
+## Additional Update (HH:mm)
 
 ...
 ```
@@ -192,6 +221,14 @@ OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
 2. Implement changes with tests if applicable.
 3. Run `pnpm build` and verify `npx donelist --dry-run` works in a real repo.
 4. Open a PR describing the motivation and approach.
+
+## Contributors
+
+![contributors](https://img.shields.io/github/contributors/jimyungkoh/done-list-generator?style=flat-square)
+
+If you like this project, ⭐ star it on GitHub or contribute a PR!
+
+Built with ❤️ by [@jimyungkoh](https://github.com/jimyungkoh)
 
 ## License
 

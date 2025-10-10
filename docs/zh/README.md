@@ -1,19 +1,29 @@
-# done-list-generator
+# done-list-generator 🧾
 
-[![npm version](https://img.shields.io/npm/v/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
+[![npm version](https://img.shields.io/npm/v/done-list-generator?style=flat-square&logo=npm)](https://www.npmjs.com/package/done-list-generator)
 [![npm downloads](https://img.shields.io/npm/dm/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
-![node >=18](https://img.shields.io/badge/node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
+![Node >=18](https://img.shields.io/badge/Node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](../../LICENSE)
 
-从本地 Git 提交生成每日 Done List（Markdown 格式），通过 OpenRouter 使用 LLM。支持跨平台（Windows/macOS/Linux），Node.js 18+。
+> 基于 AI 的 CLI，可将本地 Git 提交转换为精美的 Markdown「Done List」日报。通过 OpenRouter（GPT/Claude/Gemini 等）工作，支持 Windows/macOS/Linux。
+
+![done-list-generator logo](../assets/logo.svg)
 
 ## 主要功能
 
-- 将提交和 diff 内容总结成简洁的每日 Markdown 报告。
-- 增量更新：继续工作时，会追加到当天的文件中。
-- 无外部运行时依赖：仅使用内置 `fetch` 和 Git 的基本 `child_process`。
-- 跨平台兼容：Windows/macOS/Linux 安全运行，避免 shell 引用问题（使用参数数组）。
+- 将提交和 diff 总结为简洁的每日 Markdown 报告
+- 通过 OpenRouter 的统一 API 使用 GPT/Claude/Gemini 等模型
+- 增量更新：同一天后续运行自动追加到当天文件
+- 无外部运行时依赖：仅使用内置 `fetch` 和 Git 的基本 `child_process`
+- 跨平台兼容：Windows/macOS/Linux 安全运行，避免 shell 引用问题（参数数组）
+
+## 为什么选择 done-list-generator？
+
+- 无需手写也能持续维护每日「Done List」
+- 生成适合粘贴到 PR/站会/变更日志的 Markdown
+- 自动读取 Git 身份(`user.name`/`user.email`)进行作者过滤
+- 简单 CLI + 分层配置 + 合理默认值
 
 ## 要求
 
@@ -48,9 +58,26 @@ npx donelist --lang zh               # 也可使用 en/ko/ja（默认：en）
 
 将在当前工作目录生成 `./done-list/YYYY-MM-DD.md` 文件。
 
+## 示例输出
+
+```markdown
+# Done List - 2025-10-10
+
+## Summary
+
+- Fixed build caching issue and improved CI stability
+- Added --verbose flag and author auto-filtering
+
+## Details
+
+- Update CI: cache restore logic for node_modules
+- CLI: introduce --verbose and better error messages
+- Docs: add language badges and example GIF placeholder
+```
+
 ## 提交范围选择规则
 
-- 如果 `./done-list/YYYY-MM-DD.md` 文件存在且包含 `<!-- lastProcessedCommit: <hash> -->` 注释，则仅处理 `<hash>..HEAD` 范围的提交，并在文件末尾追加“Additional updates (HH:mm)”部分，并更新头部哈希。
+- 如果 `./done-list/YYYY-MM-DD.md` 文件存在且包含 `<!-- lastProcessedCommit: <hash> -->` 注释，则仅处理 `<hash>..HEAD` 范围的提交，并在文件末尾追加 “Additional Update (HH:mm)” 部分，并更新头部哈希。
 - 否则，从本地午夜（YYYY-MM-DD 00:00）到当前时间处理提交。
 - 可使用 `--since <iso>` 或 `--until <iso>` 选项手动指定范围。
 
@@ -77,11 +104,11 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 
 # Done List - YYYY-MM-DD
 
-## 摘要
+## Summary
 
 ...
 
-## 详情
+## Details
 
 - ...
 ```
@@ -89,7 +116,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 同一天后续运行时：
 
 ```markdown
-## Additional updates (HH:mm)
+## Additional Update (HH:mm)
 
 ...
 ```
@@ -184,6 +211,14 @@ OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
 2. 实现变更，并尽可能添加测试。
 3. 运行 `pnpm build`，然后在实际仓库中验证 `npx donelist --dry-run`。
 4. 打开 PR 时，描述动机和方法。
+
+## 贡献者
+
+![contributors](https://img.shields.io/github/contributors/jimyungkoh/done-list-generator?style=flat-square)
+
+如果你喜欢这个项目，欢迎 ⭐ Star 或提交 PR！
+
+作者: [@jimyungkoh](https://github.com/jimyungkoh)
 
 ## 许可证
 

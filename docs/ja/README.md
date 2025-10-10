@@ -1,19 +1,29 @@
-# done-list-generator
+# done-list-generator 🧾
 
-[![npm version](https://img.shields.io/npm/v/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
+[![npm version](https://img.shields.io/npm/v/done-list-generator?style=flat-square&logo=npm)](https://www.npmjs.com/package/done-list-generator)
 [![npm downloads](https://img.shields.io/npm/dm/done-list-generator?style=flat-square)](https://www.npmjs.com/package/done-list-generator)
-![node >=18](https://img.shields.io/badge/node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
+![Node >=18](https://img.shields.io/badge/Node-%3E%3D18.0.0-339933?style=flat-square&logo=node.js&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](../../LICENSE)
 
-ローカル Git コミットから日次の Done List（Markdown）を生成するツールです。OpenRouter を介した LLM を活用し、Windows/macOS/Linux に対応、Node.js 18 以上をサポートします。
+> AI を活用した CLI。ローカル Git コミットを美しい Markdown の「Done List」レポートに変換します。OpenRouter（GPT/Claude/Gemini など）経由で動作し、Windows/macOS/Linux に対応します。
+
+![done-list-generator logo](../assets/logo.svg)
 
 ## 主な機能
 
-- コミットと差分（diff）を要約し、簡潔な日次 Markdown レポートを作成します。
+- コミットと差分（diff）を要約し、簡潔な日次 Markdown レポートを作成
+- OpenRouter 単一 API で GPT/Claude/Gemini などのモデルに対応
 - 増分更新：同日の追加作業時に既存ファイルに内容を追加します。
 - 外部ランタイム依存なし：組み込みの `fetch` と Git 用の基本 `child_process` のみを使用します。
 - プラットフォーム互換性：Windows/macOS/Linux で安全に動作し、シェル引用の問題を回避します（引数配列を使用）。
+
+## Why use done-list-generator?
+
+- 毎日の「Done List」を手作業なしで一貫して維持
+- PR/スタンドアップ/チェンジログに貼り付けやすい Markdown を生成
+- Git の `user.name` / `user.email` を読み取り自動フィルタ
+- シンプルな CLI と階層設定、妥当なデフォルト
 
 ## 要件
 
@@ -48,9 +58,26 @@ npx donelist --lang ja               # en/ko/zh も可能（デフォルト: en�
 
 現在の作業ディレクトリに `./done-list/YYYY-MM-DD.md` ファイルが生成されます。
 
+## Example Output
+
+```markdown
+# Done List - 2025-10-10
+
+## Summary
+
+- Fixed build caching issue and improved CI stability
+- Added --verbose flag and author auto-filtering
+
+## Details
+
+- Update CI: cache restore logic for node_modules
+- CLI: introduce --verbose and better error messages
+- Docs: add language badges and example GIF placeholder
+```
+
 ## コミット範囲の選択基準
 
-- `./done-list/YYYY-MM-DD.md` ファイルが存在し、`<!-- lastProcessedCommit: <hash> -->` コメントが含まれている場合、`<hash>..HEAD` 範囲のコミットのみを処理し、「追加更新 (HH:mm)」セクションをファイル末尾に追加してヘッダーハッシュを更新します。
+- `./done-list/YYYY-MM-DD.md` ファイルが存在し、`<!-- lastProcessedCommit: <hash> -->` コメントが含まれている場合、`<hash>..HEAD` 範囲のコミットのみを処理し、「Additional Update (HH:mm)」セクションをファイル末尾に追加してヘッダーハッシュを更新します。
 - そうでない場合、本日の午前 0 時（YYYY-MM-DD 00:00）から現在までのコミットを処理します。
 - `--since <iso>` または `--until <iso>` オプションで範囲を直接指定できます。
 
@@ -77,11 +104,11 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 
 # Done List - YYYY-MM-DD
 
-## 要約
+## Summary
 
 ...
 
-## 詳細
+## Details
 
 - ...
 ```
@@ -89,7 +116,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 同日の後続実行時：
 
 ```markdown
-## 追加更新 (HH:mm)
+## Additional Update (HH:mm)
 
 ...
 ```
@@ -184,6 +211,14 @@ OPENROUTER_API_KEY=YOUR_KEY npx donelist --dry-run
 - 変更を実装し、可能であればテストを追加します。
 - `pnpm build` を実行した後、実際のリポジトリで `npx donelist --dry-run` を確認してください。
 - PR を開く際は、動機とアプローチを説明してください。
+
+## Contributors
+
+![contributors](https://img.shields.io/github/contributors/jimyungkoh/done-list-generator?style=flat-square)
+
+気に入っていただけたら、ぜひ ⭐ Star や PR の貢献をお願いします！
+
+Author: [@jimyungkoh](https://github.com/jimyungkoh)
 
 ## ライセンス
 

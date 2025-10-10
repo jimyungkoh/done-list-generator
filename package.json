@@ -23,14 +23,30 @@
     "node": ">=18.0.0"
   },
   "keywords": [
-    "done-list",
-    "git",
-    "openrouter",
     "cli",
-    "markdown"
+    "git",
+    "commit-summary",
+    "markdown",
+    "ai",
+    "openrouter",
+    "daily-report",
+    "developer-productivity",
+    "llm"
   ],
   "author": "jimyungkoh <aqaqeqeq0511@gmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/jimyungkoh/done-list-generator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jimyungkoh/done-list-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jimyungkoh/done-list-generator/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/jimyungkoh"
+  },
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^20.12.12",
