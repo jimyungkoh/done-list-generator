@@ -6,7 +6,7 @@
   "description": "AI-powered CLI that turns your daily Git commits into a neat Markdown 'Done List' using LLMs.",
   "type": "module",
   "bin": {
-    "donelist": "./dist/cli.js"
+    "donelist": "dist/cli.js"
   },
   "files": [
     "dist/",
@@ -38,7 +38,7 @@
   "homepage": "https://github.com/jimyungkoh/done-list-generator",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jimyungkoh/done-list-generator.git"
+    "url": "git+https://github.com/jimyungkoh/done-list-generator.git"
   },
   "bugs": {
     "url": "https://github.com/jimyungkoh/done-list-generator/issues"
