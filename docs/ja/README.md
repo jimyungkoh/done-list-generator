@@ -6,7 +6,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](../../LICENSE)
 
-> AI を活用した CLI。ローカル Git コミットを美しい Markdown の「Done List」レポートに変換します。OpenRouter（GPT/Claude/Gemini など）経由で動作し、Windows/macOS/Linux に対応します。
+> AI 搭載の CLI で、日々の Git コミットを美しい Markdown の「完了リスト」に変換します（LLM 使用） ✨
 
 ![done-list-generator logo](../assets/logo.svg)
 
@@ -85,7 +85,8 @@ npx donelist --lang ja               # en/ko/zh も可能（デフォルト: en�
 
 ```bash
 donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
-         [--openrouter-key <key>] [--since <iso>] [--until <iso>]
+         [--openrouter-key <key>] [--since <iso>] [--until <iso>] \
+         [--mode summary|detailed]
 ```
 
 - `--lang <code>`: 出力言語(デフォルト: `en`)。設定ファイルの上書き。
@@ -130,7 +131,8 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - **グローバル設定**（ユーザー範囲）：
   - Unix：`$XDG_CONFIG_HOME/donelist/donelist.json` または `~/.config/donelist/donelist.json`
   - Windows：`%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- **環境変数**：`OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`、`DONELIST_TRIM_DIFFS`（優先度の高いものに未指定の場合に使用）
+- **環境変数**：`OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`、`DONELIST_TRIM_DIFFS`、`DONELIST_MODE`（`summary`/`detailed`。優先度の高いものに未指定の場合に使用）
+- **デフォルト**：いずれにも指定が無い場合は組み込みの初期値（`lang` `"en"`、`trimDiffs` `true` など）が適用されます。
 
 `npm install` 時に上記のグローバルパスに設定ファイルが無ければ自動生成されます。
 

@@ -6,7 +6,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
-> AI-powered CLI that turns your daily Git commits into a beautiful Markdown "Done List" report. Works via OpenRouter (GPT, Claude, Gemini, etc.). Cross-platform (Windows/macOS/Linux).
+> AI-powered CLI that turns your daily Git commits into a neat Markdown 'Done List' using LLMs ✨
 
 [![lang: 한국어](https://img.shields.io/badge/lang-%ED%95%9C%EA%B5%AD%EC%96%B4-blue?style=flat-square)](docs/ko/README.md)
 [![lang: 日本語](https://img.shields.io/badge/lang-%E6%97%A5%E6%9C%AC%E8%AA%9E-blue?style=flat-square)](docs/ja/README.md)
@@ -90,7 +90,7 @@ This generates `./done-list/YYYY-MM-DD.md` in your current working directory.
 ```bash
 donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--openrouter-key <key>] [--since <iso>] [--until <iso>] \
-         [--author <name>] [--author-email <email>]
+         [--author <name>] [--author-email <email>] [--mode summary|detailed]
 ```
 
 - `--lang <code>`: Output language (default: `en`). Overrides config.
@@ -100,6 +100,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - `--since <iso>` / `--until <iso>`: Manually set time window.
 - `--verbose`: Extra diagnostics. Overrides config.
 - `--author <name>` / `--author-email <email>`: Filter commits by author. If omitted, the tool attempts to read `git config user.name`/`user.email` and applies them as defaults.
+- `--mode summary|detailed`: Output section mode (default: `summary`).
 
 ## Output
 
@@ -137,7 +138,8 @@ The tool supports layered configuration with clear precedence (highest first):
 - Global config (user scope):
   - Unix: `$XDG_CONFIG_HOME/donelist/donelist.json` or `~/.config/donelist/donelist.json`
   - Windows: `%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- Environment: `OPENROUTER_API_KEY`, `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`, and `DONELIST_TRIM_DIFFS` (boolean switch) are used when higher-priority sources omit them.
+- Environment: `OPENROUTER_API_KEY`, `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`, `DONELIST_TRIM_DIFFS` (boolean switch), and `DONELIST_MODE` (`summary`/`detailed`) are used when higher-priority sources omit them.
+- Defaults: internal fallbacks apply when nothing else provides a value (`lang` `"en"`, `trimDiffs` `true`, etc.).
 
 ### Author auto-filtering
 

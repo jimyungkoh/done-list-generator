@@ -6,7 +6,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](../../LICENSE)
 
-> 基于 AI 的 CLI，可将本地 Git 提交转换为精美的 Markdown「Done List」日报。通过 OpenRouter（GPT/Claude/Gemini 等）工作，支持 Windows/macOS/Linux。
+> AI 驱动的 CLI，将日常 Git 提交转换为精美的 Markdown「完成列表」（使用 LLM） ✨
 
 ![done-list-generator logo](../assets/logo.svg)
 
@@ -85,7 +85,8 @@ npx donelist --lang zh               # 也可使用 en/ko/ja（默认：en）
 
 ```bash
 donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
-         [--openrouter-key <key>] [--since <iso>] [--until <iso>]
+         [--openrouter-key <key>] [--since <iso>] [--until <iso>] \
+         [--mode summary|detailed]
 ```
 
 - `--lang <code>`：输出语言(默认：`en`)。覆盖配置。
@@ -130,7 +131,8 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - **全局配置**（用户范围）：
   - Unix：`$XDG_CONFIG_HOME/donelist/donelist.json` 或 `~/.config/donelist/donelist.json`
   - Windows：`%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- **环境变量**：仅当优先级更高的来源未提供时读取 `OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`、`DONELIST_TRIM_DIFFS`。
+- **环境变量**：仅当优先级更高的来源未提供时读取 `OPENROUTER_API_KEY`、`DONELIST_LANG`、`DONELIST_MODEL`、`DONELIST_VERBOSE`、`DONELIST_TRIM_DIFFS`、`DONELIST_MODE`（`summary`/`detailed`）。
+- **默认值**：若以上均未指定，则使用内置默认值（如 `lang` `"en"`、`trimDiffs` `true` 等）。
 
 在执行 `npm install` 时，如果上述全局路径中没有配置文件，会自动创建一个默认文件。
 

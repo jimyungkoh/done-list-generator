@@ -6,7 +6,7 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](../../LICENSE)
 
-> AI 기반 CLI로, 로컬 Git 커밋을 아름다운 Markdown "Done List" 보고서로 변환합니다. OpenRouter(GPT/Claude/Gemini 등)를 통해 동작하며, Windows/macOS/Linux에서 사용 가능합니다.
+> AI 기반 CLI로, 일일 Git 커밋을 깔끔한 Markdown '완료 목록'으로 변환합니다 (LLM 사용) ✨
 
 ![done-list-generator logo](../assets/logo.svg)
 
@@ -86,7 +86,7 @@ npx donelist --lang ko               # en/ja/zh도 가능(기본: en)
 ```bash
 donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--openrouter-key <key>] [--since <iso>] [--until <iso>] \
-         [--author <name>] [--author-email <email>]
+         [--author <name>] [--author-email <email>] [--mode summary|detailed]
 ```
 
 - `--lang <code>`: 출력 언어(기본: `en`). 설정 파일 덮어씀.
@@ -96,6 +96,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - `--since <iso>` / `--until <iso>`: 시간 범위를 수동으로 설정합니다.
 - `--verbose`: 상세 로그 출력. 설정 파일 덮어씀.
 - `--author <name>` / `--author-email <email>`: 작성자 기준 필터. 지정하지 않으면 로컬 `git config user.name`/`user.email`을 기본으로 읽어 해당 사용자 커밋만 포함합니다.
+- `--mode summary|detailed`: 섹션 구성 모드(기본: `summary`).
 
 ## 출력 형식
 
@@ -132,7 +133,8 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 - **전역 설정**(사용자 범위):
   - Unix: `$XDG_CONFIG_HOME/donelist/donelist.json` 또는 `~/.config/donelist/donelist.json`
   - Windows: `%USERPROFILE%/AppData/Local/donelist/donelist.json`
-- **환경 변수**: `OPENROUTER_API_KEY`, `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`, `DONELIST_TRIM_DIFFS`(상위 우선순위에 없을 경우 사용).
+- **환경 변수**: `OPENROUTER_API_KEY`, `DONELIST_LANG`, `DONELIST_MODEL`, `DONELIST_VERBOSE`, `DONELIST_TRIM_DIFFS`, `DONELIST_MODE`(`summary`/`detailed`) (상위 우선순위에 없을 경우 사용).
+- **기본값**: 어디에도 지정되지 않으면 내부 기본값(`lang` `"en"`, `trimDiffs` `true` 등)이 적용됩니다.
 
 `npm install` 시 위 전역 경로에 기본 설정 파일이 없으면 자동으로 생성됩니다.
 
