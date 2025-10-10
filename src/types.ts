@@ -1,16 +1,19 @@
 export type LanguageCode = "ko" | "en" | string;
 
+export type OutputMode = "summary" | "detailed";
+
 export interface CliOptions {
   lang?: LanguageCode;
   model?: string;
   openrouterKey?: string;
   dryRun?: boolean;
-  since?: string; // ISO string
-  until?: string; // ISO string
+  since?: string; // ISO string example: 2025-10-10
+  until?: string; // ISO string example: 2025-10-10
   verbose?: boolean;
   trimDiffs?: boolean;
   author?: string;
   authorEmail?: string;
+  mode?: OutputMode;
 }
 
 export interface CommitMeta {
