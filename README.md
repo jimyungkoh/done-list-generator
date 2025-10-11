@@ -14,6 +14,10 @@
 
 ![done-list-generator logo](https://raw.githubusercontent.com/jimyungkoh/done-list-generator/main/docs/assets/logo.svg)
 
+## Demo
+
+![done-list-demo](https://raw.githubusercontent.com/jimyungkoh/done-list-generator/main/docs/assets/demo.gif)
+
 ## Features
 
 - Summarize commits and diffs into a concise daily Markdown report

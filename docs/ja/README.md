@@ -10,6 +10,10 @@
 
 ![done-list-generator logo](../assets/logo.svg)
 
+## デモ
+
+![done-list-demo](https://raw.githubusercontent.com/jimyungkoh/done-list-generator/main/docs/assets/demo.gif)
+
 ## 主な機能
 
 - コミットと差分（diff）を要約し、簡潔な日次 Markdown レポートを作成

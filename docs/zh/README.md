@@ -10,6 +10,10 @@
 
 ![done-list-generator logo](../assets/logo.svg)
 
+## 演示
+
+![done-list-demo](https://raw.githubusercontent.com/jimyungkoh/done-list-generator/main/docs/assets/demo.gif)
+
 ## 主要功能
 
 - 将提交和 diff 总结为简洁的每日 Markdown 报告

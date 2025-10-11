@@ -10,6 +10,10 @@
 
 ![done-list-generator logo](../assets/logo.svg)
 
+## 데모
+
+![done-list-demo](https://raw.githubusercontent.com/jimyungkoh/done-list-generator/main/docs/assets/demo.gif)
+
 ## 주요 기능
 
 - 커밋과 변경 사항(diff)을 요약해 간결한 일일 Markdown 보고서를 만듭니다.
