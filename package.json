@@ -6,7 +6,7 @@
   "description": "AI-powered CLI that turns your daily Git commits into a neat Markdown 'Done List' using LLMs.",
   "type": "module",
   "bin": {
-    "donelist": "dist/cli.js"
+    "donelist": "dist/bin.js"
   },
   "files": [
     "dist/",

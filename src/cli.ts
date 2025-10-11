@@ -294,13 +294,3 @@ export async function runCli(
 
   runtime.console.log("Created:", outputPath);
 }
-
-// Always execute CLI when this module is loaded via the bin entry.
-runCli(process.argv).catch((err) => {
-  const consoleRuntime = createDefaultConsole();
-  consoleRuntime.error(
-    "[Error]",
-    err instanceof Error ? err.message : String(err)
-  );
-  consoleRuntime.setExitCode(1);
-});
