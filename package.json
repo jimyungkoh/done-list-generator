@@ -1,6 +1,6 @@
 {
   "name": "done-list-generator",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "packageManager": "pnpm@10.18.2",
   "private": false,
   "description": "AI-powered CLI that turns your daily Git commits into a neat Markdown 'Done List' using LLMs.",
