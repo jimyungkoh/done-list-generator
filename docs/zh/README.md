@@ -139,7 +139,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 默认值：
 
 - `lang`: `"en"`
-- `model`: 默认无（需通过 CLI/配置指定）
+- `model`: "x-ai/grok-4-fast"（默认 OpenRouter 模型）
 - `verbose`: `false`
 - `trimDiffs`: `true`（当 diff 超过 6 万字符时会截断）
 
@@ -150,7 +150,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```json
 {
   "lang": "ko",
-  "model": "openai/gpt-4.1-mini",
+  "model": "x-ai/grok-4-fast",
   "openrouterKey": "sk-...",
   "verbose": true,
   "trimDiffs": false

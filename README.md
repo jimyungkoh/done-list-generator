@@ -152,7 +152,7 @@ During `npm install`, the package initializes a default global config at the pat
 Defaults:
 
 - `lang`: `"en"`
-- `model`: no default (provide via CLI/config)
+- `model`: "x-ai/grok-4-fast" (OpenRouter model name)
 - `verbose`: `false`
 - `trimDiffs`: `true` (truncate commit diffs at ~60k chars)
 
@@ -161,7 +161,7 @@ Example config file (`donelist.json` or `.donelist.json`):
 ```json
 {
   "lang": "ko",
-  "model": "openai/gpt-4.1-mini",
+  "model": "x-ai/grok-4-fast",
   "openrouterKey": "sk-...",
   "verbose": true,
   "trimDiffs": false

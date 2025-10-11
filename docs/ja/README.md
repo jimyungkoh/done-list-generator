@@ -139,7 +139,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 デフォルト値：
 
 - `lang`: `"en"`
-- `model`: 既定なし（CLI/設定で指定）
+- `model`: "x-ai/grok-4-fast"（既定の OpenRouter モデル）
 - `verbose`: `false`
 - `trimDiffs`: `true`（コミット diff が 6 万文字を超えると切り詰めます）
 
@@ -150,7 +150,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```json
 {
   "lang": "ko",
-  "model": "openai/gpt-4.1-mini",
+  "model": "x-ai/grok-4-fast",
   "openrouterKey": "sk-...",
   "verbose": true,
   "trimDiffs": false

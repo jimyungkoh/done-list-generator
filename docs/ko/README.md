@@ -141,7 +141,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 기본값:
 
 - `lang`: `"en"`
-- `model`: 기본값 없음(옵션으로 지정 필요)
+- `model`: "x-ai/grok-4-fast" (기본 OpenRouter 모델)
 - `verbose`: `false`
 - `trimDiffs`: `true` (커밋 diff가 6만자를 넘으면 잘라냅니다)
 
@@ -152,7 +152,7 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
 ```json
 {
   "lang": "ko",
-  "model": "openai/gpt-4.1-mini",
+  "model": "x-ai/grok-4-fast",
   "openrouterKey": "sk-...",
   "verbose": true,
   "trimDiffs": false
