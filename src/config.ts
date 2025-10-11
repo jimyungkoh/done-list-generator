@@ -21,7 +21,7 @@ export interface LoadedConfigResult {
 
 export interface ResolvedConfig {
   lang: string;
-  model?: string;
+  model: string;
   openrouterKey: string;
   verbose?: boolean;
   trimDiffs: boolean;
@@ -180,7 +180,10 @@ export function createConfigResolver(
     const lang =
       nonEmpty(opts.lang) ?? nonEmpty(config.lang) ?? getEnvLang() ?? "en";
     const model =
-      nonEmpty(opts.model) ?? nonEmpty(config.model) ?? getEnvModel();
+      nonEmpty(opts.model) ??
+      nonEmpty(config.model) ??
+      getEnvModel() ??
+      "x-ai/grok-4-fast";
     const verbose =
       opts.verbose ??
       (config.verbose as boolean | undefined) ??

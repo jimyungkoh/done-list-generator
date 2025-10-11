@@ -40,7 +40,7 @@ async function ensureDefaultConfig() {
 
   const defaultConfig = {
     lang: "en",
-    model: "",
+    model: "x-ai/grok-4-fast",
     openrouterKey: "",
     verbose: false,
     trimDiffs: true,

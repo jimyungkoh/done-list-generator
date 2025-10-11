@@ -256,7 +256,7 @@ export async function runCli(
   const contentRaw = await runtime.openRouter.call(
     apiKey,
     {
-      model: resolved.model ?? opts.model,
+      model: resolved.model,
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },
