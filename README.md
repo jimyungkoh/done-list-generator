@@ -97,6 +97,13 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--author <name>] [--author-email <email>] [--mode summary|detailed]
 ```
 
+Help and version:
+
+```bash
+donelist --help     # or: donelist help, -h
+donelist --version  # or: -V
+```
+
 - `--lang <code>`: Output language (default: `en`). Overrides config.
 - `--model <name>`: OpenRouter model (optional). Overrides config.
 - `--openrouter-key <key>`: If omitted, uses config or `OPENROUTER_API_KEY` env var.

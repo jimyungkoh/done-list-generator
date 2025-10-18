@@ -93,6 +93,13 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--mode summary|detailed]
 ```
 
+帮助和版本：
+
+```bash
+donelist --help     # 或: donelist help, -h
+donelist --version  # 或: -V
+```
+
 - `--lang <code>`：输出语言(默认：`en`)。覆盖配置。
 - `--model <name>`：指定 OpenRouter 模型(可选)。覆盖配置。
 - `--openrouter-key <key>`：省略时，使用配置或 `OPENROUTER_API_KEY` 环境变量。
