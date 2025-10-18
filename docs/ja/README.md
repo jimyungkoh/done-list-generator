@@ -93,6 +93,13 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--mode summary|detailed]
 ```
 
+ヘルプとバージョン：
+
+```bash
+donelist --help     # または: donelist help, -h
+donelist --version  # または: -V
+```
+
 - `--lang <code>`: 出力言語(デフォルト: `en`)。設定ファイルの上書き。
 - `--model <name>`: OpenRouter モデル指定(オプション)。設定ファイルの上書き。
 - `--openrouter-key <key>`: 指定なしの場合、設定ファイルまたは `OPENROUTER_API_KEY` 環境変数を使用。

@@ -93,6 +93,13 @@ donelist [--dry-run] [--verbose] [--lang <code>] [--model <name>] \
          [--author <name>] [--author-email <email>] [--mode summary|detailed]
 ```
 
+도움말/버전:
+
+```bash
+donelist --help     # 또는: donelist help, -h
+donelist --version  # 또는: -V
+```
+
 - `--lang <code>`: 출력 언어(기본: `en`). 설정 파일 덮어씀.
 - `--model <name>`: OpenRouter 모델 지정(선택 사항). 설정 파일 덮어씀.
 - `--openrouter-key <key>`: 지정하지 않으면 설정 파일 또는 `OPENROUTER_API_KEY` 환경 변수를 사용.

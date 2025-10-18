@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { readFile as readFileFs } from "node:fs/promises";
 import { join } from "node:path";
 import { createConfigResolver, type ConfigResolver } from "./config.js";
 import { createGitClient, getTodayDateString, type GitClient } from "./git.js";
@@ -71,6 +72,106 @@ export function parseArgs(argv: string[]): CliOptions {
     else if (a === "--mode") opts.mode = argv[++i] as any; // validated later via config
   }
   return opts;
+}
+
+function isHelpRequest(argv: string[]): boolean {
+  for (let i = 2; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--help" || a === "-h" || a === "help") return true;
+  }
+  return false;
+}
+
+function isVersionRequest(argv: string[]): boolean {
+  for (let i = 2; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--version" || a === "-V") return true;
+  }
+  return false;
+}
+
+function findUnknownFlags(argv: string[]): string[] {
+  const boolFlags = new Set([
+    "--dry-run",
+    "--verbose",
+    "--help",
+    "-h",
+    "--version",
+    "-V",
+  ]);
+  const valueFlags = new Set([
+    "--lang",
+    "--model",
+    "--openrouter-key",
+    "--since",
+    "--until",
+    "--author",
+    "--author-email",
+    "--mode",
+  ]);
+
+  const unknown: string[] = [];
+  for (let i = 2; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "help" || a === "version") continue; // positional helpers
+    if (boolFlags.has(a)) continue;
+    if (valueFlags.has(a)) {
+      // consume value if present
+      if (i + 1 < argv.length) i++;
+      continue;
+    }
+    if (typeof a === "string" && a.startsWith("-")) {
+      unknown.push(a);
+    }
+  }
+  // de-dup while preserving first occurrence
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const u of unknown) {
+    if (!seen.has(u)) {
+      seen.add(u);
+      out.push(u);
+    }
+  }
+  return out;
+}
+
+function buildHelpText(): string {
+  return [
+    "Usage:",
+    "  donelist [options]",
+    "",
+    "Options:",
+    "  --dry-run                 Print to STDOUT without writing files",
+    "  --verbose                 Extra diagnostics",
+    "  --lang <code>            Output language (default: en; ko/en/ja/zh)",
+    "  --model <name>           OpenRouter model name",
+    "  --openrouter-key <key>   OpenRouter API key",
+    "  --since <iso>            Start time (e.g., 2025-10-10 00:00)",
+    "  --until <iso>            End time",
+    "  --author <name>          Filter by author name",
+    "  --author-email <email>   Filter by author email",
+    "  --mode summary|detailed  Output section mode (default: summary)",
+    "  -h, --help               Show this help",
+    "  -V, --version            Show version",
+    "",
+    "Examples:",
+    "  npx donelist --dry-run",
+    "  donelist --lang en",
+  ].join("\n");
+}
+
+async function readPackageVersion(): Promise<string> {
+  try {
+    const pkgUrl = new URL("../package.json", import.meta.url);
+    const txt = await readFileFs(pkgUrl, { encoding: "utf8" });
+    const pkg = JSON.parse(txt) as { version?: string; name?: string };
+    const name = pkg.name ?? "donelist";
+    const ver = pkg.version ?? "unknown";
+    return `${name} v${ver}`;
+  } catch {
+    return "donelist vunknown";
+  }
 }
 
 function getLocalizedLabels(language: string): {
@@ -192,6 +293,30 @@ export async function runCli(
   overrides: CliRuntimeOverrides = {}
 ): Promise<void> {
   const runtime = createRuntime(overrides);
+
+  // Meta commands: help/version handled before any heavy work
+  if (isHelpRequest(argv)) {
+    runtime.console.log(buildHelpText());
+    runtime.console.setExitCode(0);
+    return;
+  }
+  if (isVersionRequest(argv)) {
+    const v = await readPackageVersion();
+    runtime.console.log(v);
+    runtime.console.setExitCode(0);
+    return;
+  }
+
+  // Unknown flag detection (does not treat positionals as errors)
+  const unknown = findUnknownFlags(argv);
+  if (unknown.length > 0) {
+    runtime.console.error(`Unknown option(s): ${unknown.join(", ")}`);
+    runtime.console.error("Usage: donelist [options]");
+    runtime.console.error("Help: donelist --help");
+    runtime.console.setExitCode(2);
+    return;
+  }
+
   const opts = parseArgs(argv);
   const resolved = await runtime.config.resolveConfig(opts);
   const lang = resolved.lang;
